@@ -3,6 +3,9 @@
 
     <string name="app_name">Plan zajęć</string>
     <string name="action_settings">Settings</string>
-    <string name="widget_text">Test!</string>
+    <string name="widget_text">Pobierz swój plan</string>
+    <string name="passwdLabelTxt">Hasło:</string>
+    <string name="usernameLabelTxt">Nr indeksu:</string>
+    <string name="dataFetchBtnTxt">Pobierz plan</string>
 
 </resources>
