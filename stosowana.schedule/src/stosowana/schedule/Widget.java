@@ -10,11 +10,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
+import android.widget.Toast;
  
 public class Widget extends AppWidgetProvider {
  
 		
-	 HashMap<Weekday,LinkedList<Subject>> shedule;	
+	 //HashMap<Weekday,LinkedList<Subject>> shedule;	
 	 
 	 @Override
      public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -33,8 +34,13 @@ public class Widget extends AppWidgetProvider {
 			 appWidgetManager.updateAppWidget(appWidgetId,views);
 	 	}
      }
-	 private void populateList(){
+	 
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds) {
 		 
-	 }
+		super.onDeleted(context, appWidgetIds);
+		Toast.makeText(context, "nieeee!!", Toast.LENGTH_LONG).show();
+
+	}
 	
 }

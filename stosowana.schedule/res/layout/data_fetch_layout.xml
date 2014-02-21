@@ -4,41 +4,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/usernameLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/usernameLabelTxt" />
-
     <EditText
         android:id="@+id/usernameField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="@string/hint1"
         android:inputType="numberSigned"
-        android:ems="10" >
+        android:maxLength="@integer/maxLoginLength" >
 
         <requestFocus />
     </EditText>
-
-    <TextView
-        android:id="@+id/passwdLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/passwdLabelTxt" />
 
     <EditText
         android:id="@+id/passwdField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:hint="@string/hint2"
+        android:inputType="textPassword"/>
 
     <Button
         android:id="@+id/fetchDataBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:onClick="fetch"
         android:text="@string/dataFetchBtnTxt" />
-
     
 </LinearLayout>

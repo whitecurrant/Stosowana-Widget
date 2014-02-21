@@ -27,28 +27,29 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0006;
-        public static final int fetchDataBtn=0x7f0a0004;
-        public static final int passwdField=0x7f0a0003;
-        public static final int passwdLabel=0x7f0a0002;
-        public static final int usernameField=0x7f0a0001;
-        public static final int usernameLabel=0x7f0a0000;
-        public static final int widget_textview=0x7f0a0005;
+        public static final int action_settings=0x7f0b0004;
+        public static final int fetchDataBtn=0x7f0b0002;
+        public static final int passwdField=0x7f0b0001;
+        public static final int usernameField=0x7f0b0000;
+        public static final int widget_textview=0x7f0b0003;
+    }
+    public static final class integer {
+        public static final int maxLoginLength=0x7f070000;
     }
     public static final class layout {
         public static final int data_fetch_layout=0x7f030000;
         public static final int main_widget_layout=0x7f030001;
     }
     public static final class menu {
-        public static final int main=0x7f090000;
+        public static final int main=0x7f0a0000;
     }
     public static final class string {
-        public static final int action_settings=0x7f070001;
-        public static final int app_name=0x7f070000;
-        public static final int dataFetchBtnTxt=0x7f070005;
-        public static final int passwdLabelTxt=0x7f070003;
-        public static final int usernameLabelTxt=0x7f070004;
-        public static final int widget_text=0x7f070002;
+        public static final int action_settings=0x7f080001;
+        public static final int app_name=0x7f080000;
+        public static final int dataFetchBtnTxt=0x7f080005;
+        public static final int hint1=0x7f080003;
+        public static final int hint2=0x7f080004;
+        public static final int widget_text=0x7f080002;
     }
     public static final class style {
         /** 
@@ -72,11 +73,11 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080001;
+        public static final int AppTheme=0x7f090001;
     }
     public static final class xml {
         public static final int widget_provider=0x7f040000;
