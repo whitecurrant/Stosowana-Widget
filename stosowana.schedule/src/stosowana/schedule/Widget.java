@@ -10,7 +10,7 @@ import android.widget.RemoteViews;
  
 public class Widget extends AppWidgetProvider {
  
-	
+	//komentarz
 	 	
 	 @Override
      public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
