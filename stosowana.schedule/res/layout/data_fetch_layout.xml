@@ -14,6 +14,7 @@
         android:id="@+id/usernameField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="numberSigned"
         android:ems="10" >
 
         <requestFocus />
@@ -39,4 +40,5 @@
         android:onClick="fetch"
         android:text="@string/dataFetchBtnTxt" />
 
+    
 </LinearLayout>
