@@ -10,7 +10,8 @@ import android.widget.RemoteViews;
  
 public class Widget extends AppWidgetProvider {
  
-	//komentarz
+		
+	//drugi komentarz dodany, ciekawe co się stanie, myślę, że będzie konflikt
 	 	
 	 @Override
      public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
