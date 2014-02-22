@@ -30,7 +30,7 @@ public class Widget extends AppWidgetProvider {
 			 intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 			 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 			 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-			 views.setOnClickPendingIntent(R.id.widget_textview, pendingIntent);
+			 views.setOnClickPendingIntent(R.id.settings_bttn, pendingIntent);
 			 appWidgetManager.updateAppWidget(appWidgetId,views);
 	 	}
      }

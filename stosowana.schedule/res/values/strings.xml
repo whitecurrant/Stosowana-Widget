@@ -7,5 +7,7 @@
     <string name="hint1">Nr indeksu</string>
     <string name="hint2">Hasło:</string>
     <string name="dataFetchBtnTxt">Pobierz plan</string>
+    <string name="test">Test</string>
+    <string name="settings_bttn">Pobieranie danych</string>
 
 </resources>
