@@ -4,49 +4,35 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HttpContext;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.json.parsers.JSONParser;
-import com.json.parsers.JsonParserFactory;
-import com.json.serializers.ListSerializer;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.MailTo;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.json.parsers.JSONParser;
+import com.json.parsers.JsonParserFactory;
 
 public class DataFetchActivity extends Activity {
 	
@@ -61,7 +47,6 @@ public class DataFetchActivity extends Activity {
 	private static String passwd;
 	private HttpClient client;
 	private HttpPost post;
-	private DataOutputStream out = null;
 	private BufferedReader in = null;
 	private String token = null;
 	private String expires = null;
@@ -71,6 +56,8 @@ public class DataFetchActivity extends Activity {
 //	Parser JSON
 	private JsonParserFactory factory;
 	private JSONParser parser;
+	
+	private Map<Integer, List<Subject> > schedule;
 	
 	
 /*	private void populateData(){
@@ -117,8 +104,6 @@ public class DataFetchActivity extends Activity {
 			connect();
 			finish(); //konczy Activity
 		}
-		
-
 	}
 
 	private void connect() {
@@ -127,108 +112,22 @@ public class DataFetchActivity extends Activity {
 		client = new DefaultHttpClient();
 		post = new HttpPost(REQUEST);
 		uuid = UUID.randomUUID().getMostSignificantBits();
+		schedule = new HashMap<Integer, List<Subject>>();
 		
-		JSONObject jsonObj;
 		factory = JsonParserFactory.getInstance();
 		parser = factory.newJsonParser();
-		
-		Map jsonMap = null;
-		
+	
 		try {
-			jsonMap = getToken();
-			switch(Integer.parseInt(jsonMap.get("code").toString())){
-				case 200:
-					token = jsonMap.get("token").toString();
-					expires = jsonMap.get("expires").toString();
-					break;
-				case 400:
-				case 401:
-					//kod obslugi błędow
-					break;
-			}
 			
-			jsonObj= login();
-			switch(Integer.parseInt(jsonObj.getString("code"))){
-				case 200:
-					//do dokonczenia, teraz biore to co jest mi potrzebne do komunikacji
-					sid = jsonObj.getString("session");
-//					Log.d(TAG, sid);
-					break;
-				case 400:
-				case 401:
-					//kod obslugi błędow
-					break;
-			}
-			
-			jsonMap = getToken();
-			switch(Integer.parseInt(jsonMap.get("code").toString())){
-				case 200:
-					token = jsonMap.get("token").toString();
-					expires = jsonMap.get("expires").toString();
-					break;
-				case 400:
-				case 401:
-					//kod obslugi błędow
-					break;
-			}
-			
-			jsonObj = ListSchedule();
-			switch(Integer.parseInt(jsonObj.getString("code"))){
-			case 200:
-				//do dokonczenia, teraz biore to co jest mi potrzebne do komunikacji
-				scheduleID = jsonObj.getJSONArray("scheduleList").getJSONObject(0).getString("scheduleID");
-				Log.d(TAG, scheduleID);
-				break;
-			case 400:
-			case 401:
-				//kod obslugi błędow
-				break;
-			}
-			
-			jsonMap = getToken();
-			switch(Integer.parseInt(jsonMap.get("code").toString())){
-				case 200:
-					token = jsonMap.get("token").toString();
-					expires = jsonMap.get("expires").toString();
-					break;
-				case 400:
-				case 401:
-					//kod obslugi błędow
-					break;
-			}
-			jsonObj = getSchedule();
-			switch(Integer.parseInt(jsonObj.getString("code"))){
-				case 200:
-					Log.d(TAG, "getSchedule");
-					break;
-				case 400:
-				case 401:
-					//kod obslugi błędow
-					break;
-			}
-			jsonMap = getToken();
-			switch(Integer.parseInt(jsonMap.get("code").toString())){
-				case 200:
-					token = jsonMap.get("token").toString();
-					expires = jsonMap.get("expires").toString();
-					break;
-				case 400:
-				case 401:
-					//kod obslugi błędow
-					break;
-			}
-			
-			jsonMap = logout();
-			switch(Integer.parseInt(jsonMap.get("code").toString())){
-				case 200:
-					Log.d(TAG, jsonMap.toString());
-					break;
-				case 400:
-				case 401:
-					//kod obslugi błędow
-					break;
-			}
-		
+			getToken();
+			login();		
+			getToken();		
+			listSchedule();		
+			getToken();		
+			getSchedule();
+			getToken();		
+			logout();
+//			Log.d(TAG, schedule.toString());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -240,54 +139,121 @@ public class DataFetchActivity extends Activity {
 
 	}
 	
-	private Map getToken() throws ClientProtocolException, IOException{
+	private void getToken() throws ClientProtocolException, IOException {
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeGetToken()));
 		HttpResponse response = client.execute(post);
 		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		line = in.readLine();
-//		Log.d(TAG+" getToken",line);
-		return parser.parseJson(line);	
+		Map jsonMap = parser.parseJson(line);
+		switch(Integer.parseInt(jsonMap.get("code").toString())){
+			case 200:
+				token = jsonMap.get("token").toString();
+				expires = jsonMap.get("expires").toString();
+				break;
+			case 400:
+			case 401:
+				//kod obslugi błędow
+				break;
+		}
 	}
 	
-	private JSONObject login() throws ClientProtocolException, IOException, JSONException {
+	private void login() throws ClientProtocolException, IOException, JSONException {
+		
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeLogin()));
 		HttpResponse response = client.execute(post);
 		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		line = in.readLine();
 //		Log.d(TAG+" login", line);
-		return new JSONObject(line);
-	}
-	
-	private JSONObject ListSchedule() throws ClientProtocolException, IOException, JSONException {
-		String line = null;
-		post.setEntity(new UrlEncodedFormEntity(makeListSchedules()));
-		HttpResponse response = client.execute(post);
-		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-		line = in.readLine();
-//		Log.d(TAG + "ListSchedue", line);
-		return new JSONObject(line);	
-	}
-	
-	private JSONObject getSchedule() throws IllegalStateException, IOException, JSONException {
-		String line = null;
-		post.setEntity(new UrlEncodedFormEntity(makeGetSchedules()));
-		HttpResponse response = client.execute(post);
-		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-		line = in.readLine();
-		return new JSONObject(line);	
+		JSONObject jsonObj = new JSONObject(line);
+		switch(Integer.parseInt(jsonObj.getString("code"))){
+			case 200:
+				//do dokonczenia, teraz biore to co jest mi potrzebne do komunikacji
+				sid = jsonObj.getString("session");
+//				Log.d(TAG, sid);
+				break;
+			case 400:
+			case 401:
+				//kod obslugi błędow
+				break;
+		}
 	}
 
-	private Map logout() throws ClientProtocolException, IOException {
+	private void listSchedule() throws ClientProtocolException, IOException, JSONException {
+	String line = null;
+	post.setEntity(new UrlEncodedFormEntity(makeListSchedules()));
+	HttpResponse response = client.execute(post);
+	in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+	line = in.readLine();
+//	Log.d(TAG + "ListSchedue", line);	
+	JSONObject jsonObj = new JSONObject(line);
+	switch(Integer.parseInt(jsonObj.getString("code"))){
+	case 200:
+		//do dokonczenia, teraz biore to co jest mi potrzebne do komunikacji
+		scheduleID = jsonObj.getJSONArray("scheduleList").getJSONObject(0).getString("scheduleID");
+//		Log.d(TAG, scheduleID);
+		break;
+	case 400:
+	case 401:
+		//kod obslugi błędow
+		break;
+	}
+}
+
+	private void getSchedule() throws IllegalStateException, IOException, JSONException {
+	String line = null;
+	post.setEntity(new UrlEncodedFormEntity(makeGetSchedules()));
+	HttpResponse response = client.execute(post);
+	in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+	line = in.readLine();
+	JSONObject jsonObj = new JSONObject(line);
+	switch(Integer.parseInt(jsonObj.getString("code"))){
+		case 200:
+//			Log.d(TAG, "cous");
+//			Log.d(TAG,jsonObj.getJSONObject("schedule").getJSONArray("0").getJSONObject(0).getString("subjectName"));
+			for(int i=0; i<jsonObj.getJSONObject("schedule").length(); i++){
+					List<Subject> list = new ArrayList<Subject>();
+					for (int j=0; j<jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).length();j++) {
+						Subject subject = new Subject();
+						subject.setStartTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j).getString("start"));
+						subject.setStopTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j).getString("end"));
+						subject.setWeek(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j).getString("week"));
+						subject.setClassroom(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j).getString("room"));
+						subject.setTeacher(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j).getString("teacher"));
+						subject.setName(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j).getString("subjectName"));
+						subject.setType(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j).getString("type"));
+						list.add(subject);
+					}
+					
+				schedule.put(Integer.valueOf(i), list);
+			}
+			
+			break;
+		case 400:
+		case 401:
+			//kod obslugi błędow
+			break;
+	}
+}
+
+	private void logout() throws ClientProtocolException, IOException {
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeLogout()));
 		HttpResponse response = client.execute(post);
 		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		line = in.readLine();
-		return parser.parseJson(line);
+		Map jsonMap = parser.parseJson(line);
+		switch(Integer.parseInt(jsonMap.get("code").toString())){
+			case 200:
+//				Log.d(TAG, jsonMap.toString());
+				break;
+			case 400:
+			case 401:
+				//kod obslugi błędow
+				break;
+		}
 	}
-
 
 	public List<NameValuePair> makeGetToken(){
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -307,7 +273,6 @@ public class DataFetchActivity extends Activity {
 		
 		return nameValuePairs;
 	}
-	
 	private List<NameValuePair> makeListSchedules() {
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 		nameValuePairs.add(new BasicNameValuePair("call", "listSchedules"));
@@ -317,7 +282,6 @@ public class DataFetchActivity extends Activity {
 		
 		return nameValuePairs;
 	}
-	
 	private List<NameValuePair> makeGetSchedules() {
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 		nameValuePairs.add(new BasicNameValuePair("call", "getSchedule"));
@@ -328,7 +292,6 @@ public class DataFetchActivity extends Activity {
 		
 		return nameValuePairs;
 	}
-	
 	private List<NameValuePair> makeLogout() {
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 		nameValuePairs.add(new BasicNameValuePair("call", "logout"));
