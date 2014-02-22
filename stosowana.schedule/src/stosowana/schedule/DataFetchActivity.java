@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -13,7 +15,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class DataFetchActivity extends Activity {
@@ -47,6 +51,19 @@ public class DataFetchActivity extends Activity {
 			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
 		awm = AppWidgetManager.getInstance(context);
+		
+		final ListView listview = (ListView) findViewById(R.id.listView);
+		String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+		"Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+		"Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
+		"OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
+		"Android", "iPhone", "WindowsMobile" };
+		
+		final ArrayList<String> list = new ArrayList<String>(Arrays.asList(values));
+		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		        android.R.layout.simple_list_item_1, list);
+		    listview.setAdapter(adapter);
+		
 	}
 	
 	public void fetch(View view){

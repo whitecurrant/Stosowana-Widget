@@ -11,7 +11,8 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int background=0x7f050000;
+        public static final int actionbar_background=0x7f050000;
+        public static final int listview_background=0x7f050001;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -32,7 +33,7 @@ public final class R {
         public static final int action_bar=0x7f0b0003;
         public static final int action_settings=0x7f0b0008;
         public static final int fetchDataBtn=0x7f0b0002;
-        public static final int listView1=0x7f0b0005;
+        public static final int listView=0x7f0b0005;
         public static final int passwdField=0x7f0b0001;
         public static final int row_label=0x7f0b0007;
         public static final int row_time=0x7f0b0006;

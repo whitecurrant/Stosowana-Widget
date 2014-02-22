@@ -6,7 +6,8 @@
 	<LinearLayout android:id="@+id/action_bar"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-		    android:orientation="horizontal">
+		    android:orientation="horizontal"
+		    android:background="@color/actionbar_background">
 		    
 	    	<ImageView
 			    android:id="@+id/settings_bttn"
@@ -14,15 +15,15 @@
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
 			    android:src="@android:drawable/ic_menu_preferences" />
-	 	
+
 	</LinearLayout>
 	
 			
 	<ListView
-	    android:id="@+id/listView1"
+	    android:id="@+id/listView"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content" 
-	    android:background="@color/background"
+	    android:background="@color/listview_background"
 	    android:visibility="gone">
 	</ListView>
 
