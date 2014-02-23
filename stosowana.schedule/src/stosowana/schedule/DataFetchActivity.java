@@ -2,11 +2,16 @@ package stosowana.schedule;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 
 import org.apache.http.HttpResponse;
@@ -22,12 +27,15 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.json.parsers.JSONParser;
@@ -38,6 +46,7 @@ public class DataFetchActivity extends Activity {
 	private static final String TAG="DataFetchActivity"; //< It's useful in debugging
 	
 	private AppWidgetManager awm;
+
 	private int widgetID;
 	private Context context;
 //	Zmienne odpowiedzialne za pobranie danych z REQUEST
@@ -59,57 +68,67 @@ public class DataFetchActivity extends Activity {
 	private Map<Integer, List<Subject> > schedule;
 	
 	
-	private void populateData(){
+	private void showWidget(){
 		
-		/*ListView listView = (ListView) findViewById(R.id.listView);
-		if (listView == null)
-			System.out.println("null");
-		else
-			System.out.println("nienull");
-		String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-		"Blackberry", "WebOS", "Ubuntu", "Windows7"};
-		ArrayList<String> valueArray = new ArrayList<String>(Arrays.asList(values));
-		WidgetAdapter adapter = new WidgetAdapter(this,valueArray);
-		listView.setAdapter(adapter);*/
+		Intent startIntent = new Intent(DataFetchActivity.this,Widget.class);
+		startIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
+		startIntent.setAction("from data fetch activity");
+		setResult(RESULT_OK, startIntent);
+		startService(startIntent);
+		finish();
 		
 	}
-	
+	private void populateWidget(){
+		
+		AppWidgetManager awm = AppWidgetManager.getInstance(context);
+		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
+		
+		/*for (int i = 0;i<5;i++){
+			RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
+			innerView.setTextViewText(R.id.row_time, "1"+i);
+			innerView.setTextViewText(R.id.row_label, "o ja pierdole" + i*2);
+			views.addView(R.id.container, innerView);
+			awm.updateAppWidget(widgetID, views);
+		}*/
+		
+		
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
+		setContentView(R.layout.data_fetch_layout);
 		super.onCreate(savedInstanceState);
 		context = DataFetchActivity.this;
-		setContentView(R.layout.data_fetch_layout);
-		
-		
+		setResult(RESULT_CANCELED);  	
 		Intent i = getIntent();
 		Bundle extras = i.getExtras();
 		if (extras !=null){
+			
 			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
-		else
-			finish();
-		Intent result = new Intent();
-		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
-		setResult(RESULT_OK,result);
+		else {  
+			System.out.println("invalid id");
+			Log.d("invalid ID", "invalid ID!");
+            finish();  
+		}  
+		
 	}
 	
 	public void fetch(View view){
-//		Log.d(TAG,"fetch"); 
-		
+
 		EditText mName = (EditText) findViewById(R.id.usernameField);
 		EditText mPasswd = (EditText) findViewById(R.id.passwdField);
 		Editable emName = mName.getText();
 		Editable emPasswd = mPasswd.getText();
 		
-		indexID = emName.toString();
+		nrIndex = emName.toString();
 		passwd = emPasswd.toString();
 		
-		if(indexID.length() == 0 && passwd.length()==0)
+		if(nrIndex.length() == 0 && passwd.length()==0)
 			Toast.makeText(context, "Proszę podać nr indeksu oraz hasło", Toast.LENGTH_LONG).show();
-		else if(indexID.length() != 6)
+		else if(nrIndex.length() != 6)
 			Toast.makeText(context, "Niepoprawny format numeru indeksu", Toast.LENGTH_LONG).show();
-		else if(indexID.length() == 0)
+		else if(nrIndex.length() == 0)
 			Toast.makeText(context, "Proszę podać nr indeksu", Toast.LENGTH_LONG).show();
 		else if(passwd.length() == 0)
 			Toast.makeText(context, "Proszę podać hasło", Toast.LENGTH_LONG).show();
@@ -119,7 +138,6 @@ public class DataFetchActivity extends Activity {
 			finish(); //konczy Activity
 		}
 		populateData();
-
 	}
 
 	private void connect() {

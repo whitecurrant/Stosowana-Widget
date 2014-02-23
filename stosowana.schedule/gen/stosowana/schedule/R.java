@@ -35,14 +35,15 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_bar=0x7f0b0003;
-        public static final int action_settings=0x7f0b0008;
+        public static final int action_bar=0x7f0b0004;
+        public static final int action_settings=0x7f0b0009;
+        public static final int container=0x7f0b0003;
         public static final int fetchDataBtn=0x7f0b0002;
-        public static final int listView=0x7f0b0005;
         public static final int passwdField=0x7f0b0001;
-        public static final int row_label=0x7f0b0007;
-        public static final int row_time=0x7f0b0006;
-        public static final int settings_bttn=0x7f0b0004;
+        public static final int row_label=0x7f0b0008;
+        public static final int row_time=0x7f0b0007;
+        public static final int settings_bttn=0x7f0b0005;
+        public static final int textView1=0x7f0b0006;
         public static final int usernameField=0x7f0b0000;
     }
     public static final class integer {
