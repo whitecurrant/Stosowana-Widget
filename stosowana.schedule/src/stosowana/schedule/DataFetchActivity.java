@@ -11,11 +11,9 @@ import java.util.UUID;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -32,37 +30,49 @@ public class DataFetchActivity extends Activity {
 	private int widgetID;
 	private Context context;
 	
-/*	private void populateData(){
+	private void populateData(){
 		
-		RemoteViews views = new RemoteViews(context.getPackageName(),R.layout.main_widget_layout);
-		views.setTextViewText(R.id.widget_textview,"sdafjfhyf");
-		awm.updateAppWidget(widgetID, views);
-	}*/
+		ListView listView = (ListView) findViewById(R.id.listview);
+		if (listView == null)
+			System.out.println("null");
+		else
+			System.out.println("nienull");
+		String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+		"Blackberry", "WebOS", "Ubuntu", "Windows7"};
+		ArrayList<String> valueArray = new ArrayList<String>(Arrays.asList(values));
+		WidgetAdapter adapter = new WidgetAdapter(this,valueArray);
+		listView.setAdapter(adapter);
+		
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.data_fetch_layout);
+		//setContentView(R.layout.data_fetch_layout);
 		context = DataFetchActivity.this;
-		Intent i = getIntent();
+		setContentView(R.layout.data_fetch_layout);
+		
+		
+		/*Intent i = getIntent();
 		Bundle extras = i.getExtras();
 		if (extras !=null){
 			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
+		else
+			finish();
 		awm = AppWidgetManager.getInstance(context);
+		System.out.println("here");*/
+		//ListView listView = new ListView(context);
+		//View v = getLayoutInflater().inflate(R.layout.ready_widget_layout, null);
 		
-		final ListView listview = (ListView) findViewById(R.id.listView);
-		String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-		"Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-		"Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-		"OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-		"Android", "iPhone", "WindowsMobile" };
-		
-		final ArrayList<String> list = new ArrayList<String>(Arrays.asList(values));
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-		        android.R.layout.simple_list_item_1, list);
-		    listview.setAdapter(adapter);
+		//RemoteViews childView = new RemoteViews(context.getPackageName(), R.layout.list_view_layout);
+		//RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
+		//Intent result = new Intent();
+		//result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
+		//setResult(RESULT_OK,result);
+		//views.addView(R.id.main, childView);
+		//awm.updateAppWidget(widgetID,views);
 		
 	}
 	
@@ -86,9 +96,11 @@ public class DataFetchActivity extends Activity {
 			Toast.makeText(context, "Proszę podać hasło", Toast.LENGTH_LONG).show();
 		else{
 			connect();
+			populateData();
 			finish(); //konczy Activity
 		}
-		
+		populateData();
+
 		
 
 	
