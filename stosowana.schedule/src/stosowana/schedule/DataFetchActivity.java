@@ -11,6 +11,7 @@ import java.util.UUID;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -32,7 +33,7 @@ public class DataFetchActivity extends Activity {
 	
 	private void populateData(){
 		
-		ListView listView = (ListView) findViewById(R.id.listview);
+		/*ListView listView = (ListView) findViewById(R.id.listView);
 		if (listView == null)
 			System.out.println("null");
 		else
@@ -41,7 +42,7 @@ public class DataFetchActivity extends Activity {
 		"Blackberry", "WebOS", "Ubuntu", "Windows7"};
 		ArrayList<String> valueArray = new ArrayList<String>(Arrays.asList(values));
 		WidgetAdapter adapter = new WidgetAdapter(this,valueArray);
-		listView.setAdapter(adapter);
+		listView.setAdapter(adapter);*/
 		
 	}
 	
@@ -49,31 +50,20 @@ public class DataFetchActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.data_fetch_layout);
 		context = DataFetchActivity.this;
 		setContentView(R.layout.data_fetch_layout);
 		
 		
-		/*Intent i = getIntent();
+		Intent i = getIntent();
 		Bundle extras = i.getExtras();
 		if (extras !=null){
 			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
 		else
 			finish();
-		awm = AppWidgetManager.getInstance(context);
-		System.out.println("here");*/
-		//ListView listView = new ListView(context);
-		//View v = getLayoutInflater().inflate(R.layout.ready_widget_layout, null);
-		
-		//RemoteViews childView = new RemoteViews(context.getPackageName(), R.layout.list_view_layout);
-		//RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-		//Intent result = new Intent();
-		//result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
-		//setResult(RESULT_OK,result);
-		//views.addView(R.id.main, childView);
-		//awm.updateAppWidget(widgetID,views);
-		
+		Intent result = new Intent();
+		result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
+		setResult(RESULT_OK,result);
 	}
 	
 	public void fetch(View view){

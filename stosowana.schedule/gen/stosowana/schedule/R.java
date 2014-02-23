@@ -24,6 +24,11 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f060000;
         public static final int activity_vertical_margin=0x7f060001;
+        public static final int appwidget_min_height=0x7f060004;
+        /**  size = (74 x n) - 2 
+ size = (70 x n) - 30 
+         */
+        public static final int appwidget_min_width=0x7f060003;
         public static final int widget_margin=0x7f060002;
     }
     public static final class drawable {
@@ -55,6 +60,7 @@ public final class R {
         public static final int action_settings=0x7f080001;
         public static final int app_name=0x7f080000;
         public static final int dataFetchBtnTxt=0x7f080005;
+        public static final int emptyList=0x7f080008;
         public static final int hint1=0x7f080003;
         public static final int hint2=0x7f080004;
         public static final int settings_bttn=0x7f080007;
