@@ -1,3 +1,3 @@
 package stosowana.schedule;
 
-//public enum Type {LAB,WYK�,�W};
+public enum Type {LAB,WYK,CUS};
