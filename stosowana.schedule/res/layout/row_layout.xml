@@ -10,7 +10,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
-        android:text="@string/test" >
+        android:text="@string/test">
 
     </TextView>
 

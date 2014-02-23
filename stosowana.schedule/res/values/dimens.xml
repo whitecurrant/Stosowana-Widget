@@ -4,4 +4,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 	<dimen name="widget_margin">8dp</dimen>
+	<!-- size = (74 x n) - 2 -->
+	<dimen name="appwidget_min_width">294dp</dimen>
+	<dimen name="appwidget_min_height">72dp</dimen>
 </resources>
