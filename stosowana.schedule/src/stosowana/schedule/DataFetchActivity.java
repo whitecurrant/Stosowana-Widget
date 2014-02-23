@@ -2,16 +2,11 @@ package stosowana.schedule;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.UUID;
 
 import org.apache.http.HttpResponse;
@@ -27,7 +22,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,8 +39,6 @@ public class DataFetchActivity extends Activity {
 	
 	private static final String TAG="DataFetchActivity"; //< It's useful in debugging
 	
-	private AppWidgetManager awm;
-
 	private int widgetID;
 	private Context context;
 //	Zmienne odpowiedzialne za pobranie danych z REQUEST
@@ -83,15 +75,16 @@ public class DataFetchActivity extends Activity {
 		AppWidgetManager awm = AppWidgetManager.getInstance(context);
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 		
-		/*for (int i = 0;i<5;i++){
+		List<Subject> testList = schedule.get(0); // na razie tylko dla poniedziałku
+		
+		for(Subject sub:testList){
+		
 			RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
-			innerView.setTextViewText(R.id.row_time, "1"+i);
-			innerView.setTextViewText(R.id.row_label, "o ja pierdole" + i*2);
+			innerView.setTextViewText(R.id.row_time, sub.getStartTime()+" - "+sub.getStopTime());
+			innerView.setTextViewText(R.id.row_label, sub.toString());
 			views.addView(R.id.container, innerView);
 			awm.updateAppWidget(widgetID, views);
-		}*/
-		
-		
+		}
 	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +100,6 @@ public class DataFetchActivity extends Activity {
 			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
 		else {  
-			System.out.println("invalid id");
 			Log.d("invalid ID", "invalid ID!");
             finish();  
 		}  
@@ -121,23 +113,22 @@ public class DataFetchActivity extends Activity {
 		Editable emName = mName.getText();
 		Editable emPasswd = mPasswd.getText();
 		
-		nrIndex = emName.toString();
+		indexID = emName.toString();
 		passwd = emPasswd.toString();
 		
-		if(nrIndex.length() == 0 && passwd.length()==0)
+		if(indexID.length() == 0 && passwd.length()==0)
 			Toast.makeText(context, "Proszę podać nr indeksu oraz hasło", Toast.LENGTH_LONG).show();
-		else if(nrIndex.length() != 6)
+		else if(indexID.length() != 6)
 			Toast.makeText(context, "Niepoprawny format numeru indeksu", Toast.LENGTH_LONG).show();
-		else if(nrIndex.length() == 0)
+		else if(indexID.length() == 0)
 			Toast.makeText(context, "Proszę podać nr indeksu", Toast.LENGTH_LONG).show();
 		else if(passwd.length() == 0)
 			Toast.makeText(context, "Proszę podać hasło", Toast.LENGTH_LONG).show();
 		else{
 			connect();
-			populateData();
-			finish(); //konczy Activity
-		}
-		populateData();
+			populateWidget();
+			showWidget();
+			}
 	}
 
 	private void connect() {

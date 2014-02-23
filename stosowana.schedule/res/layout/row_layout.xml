@@ -6,11 +6,12 @@
 
     <TextView
         android:id="@+id/row_time"
-        android:layout_width="40dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="5dp"
+        android:textSize="10sp"
         android:text="@string/test">
 
     </TextView>

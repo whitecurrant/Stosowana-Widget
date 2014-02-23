@@ -110,7 +110,7 @@ public class Subject {
 	}
 
 	public String toString(){
-		return startTime + " - "+ stopTime+ " " +name + " " + classroom;
+		return name + " " + classroom;
 	}
 
 		
