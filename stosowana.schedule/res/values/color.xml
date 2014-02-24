@@ -2,4 +2,6 @@
 <resources>
     <color name="actionbar_background">#6E2D00</color>
     <color name="listview_background">#6E6E6E</color>
+    <color name="arrow_color">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
 </resources>

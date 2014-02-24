@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +23,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -71,12 +75,15 @@ public class DataFetchActivity extends Activity {
 		finish();
 		
 	}
-	private void populateWidget(){
+	private void populateWidgetAPI10(){
 		
 		AppWidgetManager awm = AppWidgetManager.getInstance(context);
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-		
-		List<Subject> dayList = schedule.get(0); // na razie tylko dla poniedziałku
+		Calendar c = Calendar.getInstance();
+		int i = c.get(Calendar.DAY_OF_WEEK);
+		System.out.println("today is" + i);
+		List<Subject> dayList = schedule.get(i-2); // niedziela  = 1
+
 		Collections.sort(dayList);
 		System.out.println("dayCount " + dayList.size());
 		for(Subject sub:dayList){
@@ -85,8 +92,9 @@ public class DataFetchActivity extends Activity {
 			innerView.setTextViewText(R.id.row_time, sub.getStartTime()+" - "+sub.getStopTime());
 			innerView.setTextViewText(R.id.row_label, sub.toString());
 			views.addView(R.id.container, innerView);
-			awm.updateAppWidget(widgetID, views);
 		}
+		awm.updateAppWidget(widgetID, views);
+
 	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +113,28 @@ public class DataFetchActivity extends Activity {
 			Log.d("invalid ID", "invalid ID!");
             finish();  
 		}  
-		
 	}
+	
+	protected void addClickListeners(AppWidgetManager appWidgetManager, int widgetId, RemoteViews root) {
+	    root.setOnClickPendingIntent(R.id.left_arrow_btn, getNavigationIntent(widgetId, R.id.left_arrow_btn));
+	    root.setOnClickPendingIntent(R.id.right_arrow_btn, getNavigationIntent(widgetId, R.id.right_arrow_btn));
+	}
+
+	protected PendingIntent getNavigationIntent(int widgetId, final int id) {
+	    Intent clickIntent = new Intent(this, Widget.class);
+	    clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+	    clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+	    clickIntent.putExtra(TRIGGER, id);
+
+	    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent,
+	            PendingIntent.FLAG_UPDATE_CURRENT);
+	    return pendingIntent;
+	}
+	
+	
+	
+	
+	
 	
 	public void fetch(View view){
 
@@ -127,10 +155,16 @@ public class DataFetchActivity extends Activity {
 		else if(passwd.length() == 0)
 			Toast.makeText(context, "Proszę podać hasło", Toast.LENGTH_LONG).show();
 		else{
-			connect();
-			populateWidget();
-			showWidget();
+			if (isNetworkAvailable()){
+				connect();
+				populateWidgetAPI10();
+				showWidget();
 			}
+			else{
+				Toast.makeText(context, "Brak dostępu do internetu", Toast.LENGTH_LONG).show();
+				finish();
+			}
+		}	
 	}
 
 	private void connect() {
@@ -157,15 +191,24 @@ public class DataFetchActivity extends Activity {
 //			Log.d(TAG, schedule.toString());
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+			displayFailureInfo();
+		} catch (IOException e){
 			e.printStackTrace();
-		} catch (JSONException e) {
+			displayFailureInfo();
+		} catch (JSONException e){
 			e.printStackTrace();
+			displayFailureInfo();
 		}
-		
-
+	}	
+	private void displayFailureInfo(){
+		Toast.makeText(context, "Błąd połączenia", Toast.LENGTH_LONG).show();
+		finish();
 	}
-	
+	private boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
 	private void getToken() throws ClientProtocolException, IOException {
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeGetToken()));

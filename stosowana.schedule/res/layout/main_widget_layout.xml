@@ -10,28 +10,56 @@
    		android:layout_width="match_parent"
     	android:layout_height="wrap_content">  
    		
-		<LinearLayout android:id="@+id/action_bar"
-			    android:layout_width="match_parent"
-			    android:layout_height="wrap_content"
-			    android:orientation="horizontal"
-			    android:background="@color/actionbar_background">
-			    
-		    	<ImageView
-				    android:id="@+id/settings_bttn"
-					android:contentDescription="@string/settings_bttn"
-				    android:layout_width="wrap_content"
-				    android:layout_height="wrap_content"
-				    android:src="@android:drawable/ic_menu_manage" />
+		<RelativeLayout
 
-		    	<TextView
-		    	    android:id="@+id/textView1"
-		    	    android:layout_width="match_parent"
-		    	    android:layout_height="match_parent"
-		    	    android:gravity="center|left"
-		    	    android:text="@string/app_name"
-		    	    android:textSize="20sp" />
-	
-		</LinearLayout>
+		    android:id="@+id/action_bar"
+		    android:layout_width="match_parent"
+		    android:layout_height="40dp"
+		    android:background="@color/actionbar_background"
+		    android:orientation="horizontal" >
+
+			<ImageView
+			    android:id="@+id/left_arrow_btn"
+			    android:layout_width="25dp"
+			    android:layout_height="30dp"
+			    android:layout_alignParentBottom="true"
+			    android:layout_alignParentLeft="true"
+			    android:layout_alignParentTop="true"
+			    android:layout_marginRight="5dp"
+			    android:alpha="0.6"
+			    android:src="@drawable/arrow_left" />
+
+		    <ImageView
+		        android:id="@+id/right_arrow_btn"
+		        android:layout_width="25dp"
+		        android:layout_height="30dp"
+		        android:layout_alignParentBottom="true"
+		        android:layout_alignParentRight="true"
+		        android:layout_alignParentTop="true"
+		        android:alpha="0.6"
+		        android:src="@drawable/arrow_right" />
+
+		    <ImageView
+		        android:id="@+id/settings_bttn"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentTop="true"
+		        android:layout_toLeftOf="@+id/right_arrow_btn"
+		        android:contentDescription="@string/settings_bttn"
+		        android:src="@android:drawable/ic_menu_manage" />
+
+		    <TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="40dp"
+		        android:layout_alignParentTop="true"
+		        android:layout_toRightOf="@+id/left_arrow_btn"
+		        android:gravity="center|left"
+		        android:text="@string/app_name"
+		        android:textSize="20sp" />
+
+		</RelativeLayout>
+
 	</LinearLayout>
 	
 			

@@ -3,6 +3,7 @@ package stosowana.schedule;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.Toast;
  
@@ -23,18 +24,20 @@ public class Widget extends AppWidgetProvider {
 	 
 	private void updateWidget(AppWidgetManager awm, int widgetID){
 
-			 //Intent intent = new Intent(context, DataFetchActivity.class);
-			 //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			 //intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-			 //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-			 //RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-			 //views.setOnClickPendingIntent(R.id.settings_bttn, pendingIntent);
-			 //appWidgetManager.updateAppWidget(appWidgetId,views);
-		
-		
 	 	
 	} 
 	
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		super.onReceive(context, intent);
+		String action = intent.getAction();
+	    if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(action))
+	    {
+	        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
+	        AppWidgetManager.getInstance(context).updateAppWidget(intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS), views);
+	    }
+	}
+
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds) {
 		 

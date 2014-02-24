@@ -12,7 +12,9 @@ public final class R {
     }
     public static final class color {
         public static final int actionbar_background=0x7f050000;
+        public static final int arrow_color=0x7f050002;
         public static final int listview_background=0x7f050001;
+        public static final int transparent=0x7f050003;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -32,18 +34,22 @@ public final class R {
         public static final int widget_margin=0x7f060002;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int arrow_left=0x7f020000;
+        public static final int arrow_right=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
         public static final int action_bar=0x7f0b0004;
-        public static final int action_settings=0x7f0b0009;
+        public static final int action_settings=0x7f0b000b;
         public static final int container=0x7f0b0003;
         public static final int fetchDataBtn=0x7f0b0002;
+        public static final int left_arrow_btn=0x7f0b0005;
         public static final int passwdField=0x7f0b0001;
-        public static final int row_label=0x7f0b0008;
-        public static final int row_time=0x7f0b0007;
-        public static final int settings_bttn=0x7f0b0005;
-        public static final int textView1=0x7f0b0006;
+        public static final int right_arrow_btn=0x7f0b0006;
+        public static final int row_label=0x7f0b000a;
+        public static final int row_time=0x7f0b0009;
+        public static final int settings_bttn=0x7f0b0007;
+        public static final int textView1=0x7f0b0008;
         public static final int usernameField=0x7f0b0000;
     }
     public static final class integer {
