@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,10 +76,11 @@ public class DataFetchActivity extends Activity {
 		AppWidgetManager awm = AppWidgetManager.getInstance(context);
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 		
-		List<Subject> testList = schedule.get(0); // na razie tylko dla poniedziałku
-		
-		for(Subject sub:testList){
-		
+		List<Subject> dayList = schedule.get(0); // na razie tylko dla poniedziałku
+		Collections.sort(dayList);
+		System.out.println("dayCount " + dayList.size());
+		for(Subject sub:dayList){
+			
 			RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
 			innerView.setTextViewText(R.id.row_time, sub.getStartTime()+" - "+sub.getStopTime());
 			innerView.setTextViewText(R.id.row_label, sub.toString());

@@ -1,7 +1,7 @@
 package stosowana.schedule;
 
 	
-public class Subject {
+public class Subject implements Comparable<Subject> {
 
 	private String name, teacher, classroom;
 	private Hour startTime,stopTime;
@@ -46,7 +46,7 @@ public class Subject {
 	}
 	
 	public Hour getStopTime() {
-		return startTime;
+		return stopTime;
 	}
 	
 	public Type getType() {
@@ -111,6 +111,11 @@ public class Subject {
 
 	public String toString(){
 		return name + " " + classroom;
+	}
+
+	@Override
+	public int compareTo(Subject s2) {
+		return startTime.compareTo(s2.getStartTime());
 	}
 
 		
