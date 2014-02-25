@@ -1,7 +1,10 @@
 package stosowana.schedule;
 
-	
-public class Subject implements Comparable<Subject> {
+import java.io.Serializable;
+
+
+public class Subject implements Comparable<Subject> , Serializable{
+
 
 	private String name, teacher, classroom;
 	private Hour startTime,stopTime;
@@ -9,7 +12,7 @@ public class Subject implements Comparable<Subject> {
 	private Type type;
 	private Week week;
 	
-	public Subject(String name, String teacher,String classroom, String startTme, String stopTime, Weekday day, boolean everyWeek){
+	public Subject(String name, String teacher,String classroom, String startTme, String stopTime){
 		
 		this.name = name;
 		this.teacher = teacher;
