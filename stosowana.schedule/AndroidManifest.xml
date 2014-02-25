@@ -33,6 +33,9 @@
           		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />  
       		</intent-filter>
         </activity>
+        <service
+   			android:name="stosowana.schedule.WidgetService"
+  			android:permission="android.permission.BIND_REMOTEVIEWS" />
    		
    </application>
 

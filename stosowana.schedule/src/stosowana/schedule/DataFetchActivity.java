@@ -22,13 +22,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -62,40 +64,30 @@ public class DataFetchActivity extends Activity {
 	private JsonParserFactory factory;
 	private JSONParser parser;
 	
-	private Map<Integer, List<Subject> > schedule;
 	
-	
+	private void connectToFalseData(){
+		Log.d("widget","connecting to false data");
+		FalseData falseDate =  new FalseData();
+		Widget.setSchedule(falseDate.getFalseSchedule());
+		
+	}
 	private void showWidget(){
 		
+		//ustawienie pozytywnego rezultatu konfiguracji
 		Intent startIntent = new Intent(DataFetchActivity.this,Widget.class);
 		startIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
 		startIntent.setAction("from data fetch activity");
 		setResult(RESULT_OK, startIntent);
 		startService(startIntent);
+		//to niżej to wymuszenie update'a widgeta
+		AppWidgetManager awm = AppWidgetManager.getInstance(context);
+		Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, this, Widget.class);
+		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,awm.getAppWidgetIds(new ComponentName(getApplicationContext(), Widget.class)));
+		sendBroadcast(intent);
 		finish();
 		
 	}
-	private void populateWidgetAPI10(){
-		
-		AppWidgetManager awm = AppWidgetManager.getInstance(context);
-		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-		Calendar c = Calendar.getInstance();
-		int i = c.get(Calendar.DAY_OF_WEEK);
-		System.out.println("today is" + i);
-		List<Subject> dayList = schedule.get(i-2); // niedziela  = 1
 
-		Collections.sort(dayList);
-		System.out.println("dayCount " + dayList.size());
-		for(Subject sub:dayList){
-			
-			RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
-			innerView.setTextViewText(R.id.row_time, sub.getStartTime()+" - "+sub.getStopTime());
-			innerView.setTextViewText(R.id.row_label, sub.toString());
-			views.addView(R.id.container, innerView);
-		}
-		awm.updateAppWidget(widgetID, views);
-
-	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -114,27 +106,6 @@ public class DataFetchActivity extends Activity {
             finish();  
 		}  
 	}
-	
-	protected void addClickListeners(AppWidgetManager appWidgetManager, int widgetId, RemoteViews root) {
-	    root.setOnClickPendingIntent(R.id.left_arrow_btn, getNavigationIntent(widgetId, R.id.left_arrow_btn));
-	    root.setOnClickPendingIntent(R.id.right_arrow_btn, getNavigationIntent(widgetId, R.id.right_arrow_btn));
-	}
-
-	protected PendingIntent getNavigationIntent(int widgetId, final int id) {
-	    Intent clickIntent = new Intent(this, Widget.class);
-	    clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-	    clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-	    clickIntent.putExtra(TRIGGER, id);
-
-	    PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent,
-	            PendingIntent.FLAG_UPDATE_CURRENT);
-	    return pendingIntent;
-	}
-	
-	
-	
-	
-	
 	
 	public void fetch(View view){
 
@@ -156,8 +127,8 @@ public class DataFetchActivity extends Activity {
 			Toast.makeText(context, "Proszę podać hasło", Toast.LENGTH_LONG).show();
 		else{
 			if (isNetworkAvailable()){
-				connect();
-				populateWidgetAPI10();
+				//connect();
+				connectToFalseData();
 				showWidget();
 			}
 			else{
@@ -173,7 +144,7 @@ public class DataFetchActivity extends Activity {
 		client = new DefaultHttpClient();
 		post = new HttpPost(REQUEST);
 		uuid = UUID.randomUUID().getMostSignificantBits();
-		schedule = new HashMap<Integer, List<Subject>>();
+		Widget.setSchedule(new HashMap<Integer, List<Subject>>());
 		
 		factory = JsonParserFactory.getInstance();
 		parser = factory.newJsonParser();
@@ -296,7 +267,7 @@ public class DataFetchActivity extends Activity {
 						list.add(subject);
 					}
 					
-				schedule.put(Integer.valueOf(i), list);
+				Widget.getSchedule().put(Integer.valueOf(i), list);
 			}
 			
 			break;

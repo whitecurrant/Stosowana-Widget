@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="@dimen/appwidget_min_width"
+    android:configure="stosowana.schedule.DataFetchActivity"
+    android:initialLayout="@layout/main_widget_layout"
     android:minHeight="@dimen/appwidget_min_height"
-	android:updatePeriodMillis="1800000"    
-	android:initialLayout="@layout/main_widget_layout" 
-	android:configure="stosowana.schedule.DataFetchActivity"
-/>
+    android:minWidth="@dimen/appwidget_min_width"
+    android:updatePeriodMillis="1800000" />
