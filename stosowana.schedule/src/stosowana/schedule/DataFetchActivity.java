@@ -1,10 +1,18 @@
 package stosowana.schedule;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -59,6 +67,8 @@ public class DataFetchActivity extends Activity {
 	
 	private Map<Integer, List<Subject> > schedule;
 	
+	private String fileName = "/file.ser"; //< file with serialized data
+	
 	
 	private void showWidget(){
 		
@@ -88,15 +98,46 @@ public class DataFetchActivity extends Activity {
 	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+	
+		boolean dontShowLoginMenu = true; 
+
+//		deleteScheduleDir();// <- Don't touch me! I'm important!
+				
+		File file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
+		// It's true only for very first start on mobile.
+		if(!file.exists())
+			file.mkdir();	
+		// It's true when schedule exist
+		else if(file.listFiles().length != 0){
+			Log.d(TAG, Integer.toString(file.listFiles().length));
+			Log.d(TAG, file.listFiles()[0].getPath());
+			loadData(file);	
+//			dontShowLoginMenu = true;
+			
+		}else{
+//			setContentView(R.layout.data_fetch_layout);
+			
+//			to restore fetching data from internet, just replace this v on this ^
+			
+//		------------	
+			schedule = new HashMap<Integer, List<Subject>>();
+			List<Subject> list = new ArrayList<Subject>();
+			list.add(new Subject("pierwsze","teacher", "12","08:00","09:30"));
+			list.add(new Subject("drugie","teacher", "10","09:30","11:30"));
+			schedule.put(0, list);
+			
+			saveData(file);
+//		-----------	
+			
 		
-		setContentView(R.layout.data_fetch_layout);
+		}
+		
 		super.onCreate(savedInstanceState);
 		context = DataFetchActivity.this;
 		setResult(RESULT_CANCELED);  	
 		Intent i = getIntent();
 		Bundle extras = i.getExtras();
-		if (extras !=null){
-			
+		if (extras !=null){	
 			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
 		else {  
@@ -104,10 +145,85 @@ public class DataFetchActivity extends Activity {
             finish();  
 		}  
 		
+		if(dontShowLoginMenu){
+			populateWidget();
+			showWidget();
+		}
+			
+		
 	}
 	
+	private void saveData(File file) {
+		Log.d(TAG, "saveData");
+		
+		FileOutputStream fos = null;
+		ObjectOutputStream oos = null;
+		
+		try{
+			fos = new FileOutputStream(file.getPath() + fileName);
+			oos = new ObjectOutputStream(fos);
+			oos.writeObject(schedule);
+		}catch (FileNotFoundException e){
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				if(fos != null)
+					fos.close();
+				if(oos != null)
+					oos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	private void loadData(File file) {
+		Log.d(TAG, "loadData");
+		
+		FileInputStream fis = null;
+		ObjectInputStream ois = null;
+		
+		try{
+			fis = new FileInputStream(file.getPath() + fileName);
+			ois = new ObjectInputStream(fis);
+			schedule = (Map<Integer, List<Subject>>) ois.readObject();
+		} catch (FileNotFoundException e){
+			e.printStackTrace();
+		} catch (StreamCorruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		finally{
+			try {
+				if(ois != null)
+					ois.close();
+				if(fis != null)
+					fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+	}
+	private void deleteScheduleDir() {
+		File dir = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
+		if (dir.isDirectory()) {
+	        String[] children = dir.list();
+	        for (int i = 0; i < children.length; i++) {
+	            new File(dir, children[i]).delete();
+	        }
+	    }
+	}
 	public void fetch(View view){
-
+		Log.d(TAG, "fetch");
 		EditText mName = (EditText) findViewById(R.id.usernameField);
 		EditText mPasswd = (EditText) findViewById(R.id.passwdField);
 		Editable emName = mName.getText();
@@ -152,7 +268,7 @@ public class DataFetchActivity extends Activity {
 			getSchedule();
 			getToken();		
 			logout();
-//			Log.d(TAG, schedule.toString());
+//			saveData(new File(this.getFilesDir().getAbsolutePath() + "/schedule"));
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -161,6 +277,7 @@ public class DataFetchActivity extends Activity {
 			e.printStackTrace();
 		}
 		
+	
 
 	}
 	

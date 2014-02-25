@@ -1,6 +1,8 @@
 package stosowana.schedule;
 
-public class Hour implements Comparable<Hour> {
+import java.io.Serializable;
+
+public class Hour implements Comparable<Hour>, Serializable {
 
 	protected int hours;
 	protected int minutes;

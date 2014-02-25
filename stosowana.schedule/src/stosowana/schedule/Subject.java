@@ -1,7 +1,9 @@
 package stosowana.schedule;
 
+import java.io.Serializable;
+
 	
-public class Subject {
+public class Subject implements Serializable{
 
 	private String name, teacher, classroom;
 	private Hour startTime,stopTime;
@@ -9,7 +11,7 @@ public class Subject {
 	private Type type;
 	private Week week;
 	
-	public Subject(String name, String teacher,String classroom, String startTme, String stopTime, Weekday day, boolean everyWeek){
+	public Subject(String name, String teacher,String classroom, String startTme, String stopTime){
 		
 		this.name = name;
 		this.teacher = teacher;
