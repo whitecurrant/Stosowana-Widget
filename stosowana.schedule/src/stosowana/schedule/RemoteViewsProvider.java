@@ -17,17 +17,19 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 	private TestData data;
 	private ArrayList<Subject> itemList; 
 	private Context context = null;
-	 
+	private Intent intent; 
 	public RemoteViewsProvider(Context context, Intent intent) {
 		
 		this.context = context;
+		this.intent = intent;
 	}
 	 
 	@Override
 	public void onCreate() {
 		
 		data =  new TestData();
-		itemList = (ArrayList<Subject>) Widget.getSchedule().get(Widget.dayNum);
+		int dayNum = intent.getIntExtra("dayNum",0);
+		itemList = (ArrayList<Subject>) Widget.getSchedule().get(dayNum);
 		Log.d("widget", "onCreate in a factory");
 	} 
 	@Override

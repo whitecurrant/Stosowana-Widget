@@ -60,11 +60,12 @@
 
 	</RelativeLayout>
 	
-	 <!-- ListView to be shown on widget -->
-    <ListView
-        android:id="@+id/listView"
+	 <StackView 
+        android:id="@+id/stack_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:loopViews="true" />
  
     <!-- Empty view is show if list items are empty -->
     <TextView

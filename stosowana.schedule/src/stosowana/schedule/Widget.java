@@ -139,11 +139,11 @@ public class Widget extends AppWidgetProvider {
 
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 		awm.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listView);
-		Intent serviceIntent = new Intent(context, WidgetService.class);
+		/*Intent serviceIntent = new Intent(context, WidgetService.class);
 		serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 		remoteViews.setRemoteAdapter(appWidgetId, R.id.listView, serviceIntent);
-		remoteViews.setEmptyView(R.id.listView, R.id.empty_view);
+		remoteViews.setEmptyView(R.id.listView, R.id.empty_view);*/
 		awm.updateAppWidget(appWidgetId, remoteViews);
 	}
 	public static void setSchedule(Map<Integer, List<Subject> > schedule){
