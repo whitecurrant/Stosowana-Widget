@@ -28,6 +28,10 @@ public class Widget extends AppWidgetProvider {
 	private static Map<Integer, List<Subject> > schedule;
 	public static int dayNum = 0;
 	
+	private static boolean lectures = true;
+	private static boolean laboratories = true;
+	private static boolean excercise = true;
+	
 	
 	
 	/**
@@ -42,9 +46,9 @@ public class Widget extends AppWidgetProvider {
 		Log.d(TAG, "updating...");
 
 		if (isEmpty){
-			RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-			for (int widgetID : appWidgetIds)
-				awm.updateAppWidget(widgetID, rv);
+//			RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
+//			for (int widgetID : appWidgetIds)
+//				awm.updateAppWidget(widgetID, rv);
 			return;			
 		}
 		
@@ -82,12 +86,16 @@ public class Widget extends AppWidgetProvider {
 		// ustawiamy intenty opakowane w pending intenty i przypisujemy do przycisków
 		Intent intentNext = new Intent(context,Widget.class);
 		Intent intentPrev = new Intent(context,Widget.class);
+		Intent menu = new Intent(context,MenuActivity.class);
 		intentNext.setAction(SHOW_NEXT);
 		intentPrev.setAction(SHOW_PREV);
+//		menu.setAction(MENU);
 		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
 		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
+		PendingIntent pMenu = PendingIntent.getActivity(context, 0, menu, 0);
 		views.setOnClickPendingIntent(R.id.right_arrow_btn, pIntentNext);
 		views.setOnClickPendingIntent(R.id.left_arrow_btn, pIntentPrev);
+		views.setOnClickPendingIntent(R.id.settings_bttn, pMenu);
 		//wypełniamy widoki listy
 		for (Subject sub : dayList) {
 
@@ -152,5 +160,23 @@ public class Widget extends AppWidgetProvider {
 	}
 	public static Map<Integer, List<Subject> > getSchedule(){
 		return Widget.schedule;
+	}
+	public static boolean isLectures() {
+		return lectures;
+	}
+	public static void setLectures(boolean lectures) {
+		Widget.lectures = lectures;
+	}
+	public static boolean isLaboratories() {
+		return laboratories;
+	}
+	public static void setLaboratories(boolean laboratories) {
+		Widget.laboratories = laboratories;
+	}
+	public static boolean isExcercise() {
+		return excercise;
+	}
+	public static void setExcercise(boolean excercise) {
+		Widget.excercise = excercise;
 	}
 }
