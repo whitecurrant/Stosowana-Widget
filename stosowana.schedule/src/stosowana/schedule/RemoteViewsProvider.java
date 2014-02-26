@@ -14,7 +14,6 @@ import android.widget.RemoteViewsService.RemoteViewsFactory;
 @TargetApi(11)
 public class RemoteViewsProvider implements RemoteViewsFactory {
 	
-	private TestData data;
 	private ArrayList<Subject> itemList; 
 	private Context context = null;
 	private Intent intent; 
@@ -27,10 +26,9 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 	@Override
 	public void onCreate() {
 		
-		data =  new TestData();
+		Log.d("widget", "onCreate in InnerFactory");
 		int dayNum = intent.getIntExtra("dayNum",0);
 		itemList = (ArrayList<Subject>) Widget.getSchedule().get(dayNum);
-		Log.d("widget", "onCreate in a factory");
 	} 
 	@Override
 	public int getCount() {
@@ -49,7 +47,7 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 		Subject item = itemList.get(position);
 		remoteView.setTextViewText(R.id.row_time, item.getStartTime() + " - " + item.getStopTime());
 		remoteView.setTextViewText(R.id.row_label, item.toString());
-	
+		Log.d("widget", "returning ListView");
 		return remoteView;
 	}
 
@@ -58,7 +56,7 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 		
 		RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
 	    remoteView.setTextViewText(R.id.row_time, "");
-	    remoteView.setTextViewText(R.id.row_label, "Pobieranie danych...");
+	    remoteView.setTextViewText(R.id.row_label, "Wczytywanie danych...");
 		return remoteView;
 	}
 

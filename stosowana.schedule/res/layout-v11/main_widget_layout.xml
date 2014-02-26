@@ -60,15 +60,49 @@
 
 	</RelativeLayout>
 	
-	 <StackView 
-        android:id="@+id/stack_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:loopViews="true" />
- 
-    <!-- Empty view is show if list items are empty -->
-    <TextView
+	 <ViewFlipper
+	     android:id="@+id/flipper"
+	     android:layout_width="match_parent"
+	     android:layout_height="match_parent"
+	     android:addStatesFromChildren="true"
+	     android:animateFirstView="true"
+	     android:inAnimation="@anim/slide_left_in"
+	     android:outAnimation="@anim/slide_left_out"
+	     android:splitMotionEvents="true"
+	     android:visibility="visible" >
+
+	     <ListView
+	         android:id="@+id/listView0"
+	         android:layout_width="match_parent"
+	         android:layout_height="match_parent" >
+	     </ListView>
+
+	     <ListView
+	         android:id="@+id/listView1"
+	         android:layout_width="match_parent"
+	         android:layout_height="match_parent" >
+	     </ListView>
+
+	     <ListView
+	         android:id="@+id/listView2"
+	         android:layout_width="match_parent"
+	         android:layout_height="match_parent" >
+	     </ListView>
+
+	     <ListView
+	         android:id="@+id/listView3"
+	         android:layout_width="match_parent"
+	         android:layout_height="match_parent" >
+	     </ListView>
+
+	     <ListView
+	         android:id="@+id/listView4"
+	         android:layout_width="match_parent"
+	         android:layout_height="match_parent" >
+	     </ListView>
+		
+	</ViewFlipper>
+	<TextView
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -76,7 +110,7 @@
         android:textColor="#ffffff"
         android:textSize="20sp"
         android:visibility="gone" />
-
+ 
 </LinearLayout>
 		
 

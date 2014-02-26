@@ -10,5 +10,6 @@
     <string name="test">Test</string>
     <string name="settings_bttn">Pobieranie danych</string>
     <string name="emptyList">brak elementów</string>
+    
 
 </resources>
