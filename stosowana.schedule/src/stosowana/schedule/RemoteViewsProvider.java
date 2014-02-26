@@ -14,7 +14,7 @@ import android.widget.RemoteViewsService.RemoteViewsFactory;
 @TargetApi(11)
 public class RemoteViewsProvider implements RemoteViewsFactory {
 	
-	private FalseData data;
+	private TestData data;
 	private ArrayList<Subject> itemList; 
 	private Context context = null;
 	 
@@ -26,7 +26,7 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 	@Override
 	public void onCreate() {
 		
-		data =  new FalseData();
+		data =  new TestData();
 		itemList = (ArrayList<Subject>) Widget.getSchedule().get(Widget.dayNum);
 		Log.d("widget", "onCreate in a factory");
 	} 

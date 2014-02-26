@@ -2,13 +2,14 @@ package stosowana.schedule;
 
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.annotation.TargetApi;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,22 +20,26 @@ import android.widget.Toast;
 
 public class Widget extends AppWidgetProvider {
 
-	Context context;
+	private Context context;
 	private static boolean isEmpty = true;
+	public static final String SHOW_NEXT = "stosowana.schedule.SHOW_NEXT";
+	public static final String SHOW_PREV = "stosowana.schedule.SHOW_PREV";
+	private static final String TAG="widget";
 	private static Map<Integer, List<Subject> > schedule;
 	public static int dayNum = 0;
 	
-
+	
+	
 	/**
-	 * Przy okazji update'u widgetu sprawdzamy czy nie jest pusty (jeśli tak to ustawiamy pusty widok) i po sprawdzeniu 
-	 * wersji wywołujemy odpowiednią funkcję updatującą dla każdej instancji widgetu (ktoś mógł ich dodać kilka)
+	 * Przy okazji update'u widgetu sprawdzamy czy nie jest pusty (jeśli tak to ustawiamy pusty widok) a po sprawdzeniu 
+	 * wersji wywołujemy odpowiednią funkcję updatującą dla każdej instancji widgetu (ktoś mógł ich dodać kilka) 
 	 */
 	@Override
 	public void onUpdate(Context context, AppWidgetManager awm,int[] appWidgetIds) {
 
 		this.context = context;
 		
-		Log.d("widget", "updating");
+		Log.d(TAG, "updating...");
 
 		if (isEmpty){
 			RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
@@ -43,27 +48,47 @@ public class Widget extends AppWidgetProvider {
 			return;			
 		}
 		
-		Calendar c = Calendar.getInstance();
-		int i = c.get(Calendar.DAY_OF_WEEK); // co dzisiaj mamy?
-		List<Subject> dayList = schedule.get(i - 2); // niedziela = 1																	// = 1
+		List<Subject> dayList = schedule.get(dayNum); 
 		Collections.sort(dayList);
+		Log.d(TAG, "day nr " + dayNum);
+		Log.d(TAG, dayList.toString());
 		
 		if (Build.VERSION.SDK_INT >= 11) {
+			Log.d(TAG, "for api 11");
 			for (int widgetID : appWidgetIds)
 				updateWidgetAPI11(awm, widgetID);
 		} else {
+			Log.d(TAG, "for api 10");
 			for (int widgetID : appWidgetIds)
 				updateWidgetAPI10(awm, widgetID, dayList);
 		}
 		super.onUpdate(context, awm, appWidgetIds);
 	}
+	private void updateCurrentDay(){
+		
+		Calendar c = Calendar.getInstance();
+		int i = c.get(Calendar.DAY_OF_WEEK); // co dzisiaj mamy?
+		dayNum = i - 2; // niedziela = 1
+	}
+	
 	/**
 	 * Dla starszych wersji ręcznie tworzymy widok 'listy' i wypełniamy pola dla każdego przedmiotu
 	 */
 	private void updateWidgetAPI10(AppWidgetManager awm, int widgetID, List<Subject> dayList) {
 
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-
+		//usuwamy poprzednie widoki
+		views.removeAllViews(R.id.container);
+		// ustawiamy intenty opakowane w pending intenty i przypisujemy do przycisków
+		Intent intentNext = new Intent(context,Widget.class);
+		Intent intentPrev = new Intent(context,Widget.class);
+		intentNext.setAction(SHOW_NEXT);
+		intentPrev.setAction(SHOW_PREV);
+		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
+		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
+		views.setOnClickPendingIntent(R.id.right_arrow_btn, pIntentNext);
+		views.setOnClickPendingIntent(R.id.left_arrow_btn, pIntentPrev);
+		//wypełniamy widoki listy
 		for (Subject sub : dayList) {
 
 			RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
@@ -76,8 +101,24 @@ public class Widget extends AppWidgetProvider {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		
+		if(intent.getAction().equals(SHOW_NEXT)){
+			
+			Log.d(TAG, "showing next");
+			dayNum = (++dayNum)%5;
+			//zeby wymusic funkcję onUpdate z super trzeba zmodyfikowac intent
+			intent  = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, Widget.class);
+			intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, Widget.class)));
+		}
+		else if (intent.getAction().equals(SHOW_PREV)){
+			
+			Log.d(TAG, "showing previous");
+			dayNum = (--dayNum+5)%5;
+			intent  = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, Widget.class);
+			intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, Widget.class)));
+		}
+		
 		super.onReceive(context, intent);
-
 	}
 
 	@Override

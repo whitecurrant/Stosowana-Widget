@@ -36,6 +36,8 @@
         <service
    			android:name="stosowana.schedule.WidgetService"
   			android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name="UpdateService"></service>
+        
    		
    </application>
 

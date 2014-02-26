@@ -46,10 +46,13 @@ import com.json.parsers.JsonParserFactory;
 
 public class DataFetchActivity extends Activity {
 	
-	private static final String TAG="DataFetchActivity"; //< It's useful in debugging
+	private static final String TAG="widget"; //< It's useful in debugging
 	
 	private int widgetID;
 	private Context context;
+	private File file;
+	private String fileName = "/file.ser"; //< file with serialized data
+
 //	Zmienne odpowiedzialne za pobranie danych z REQUEST
 	private final static String REQUEST = "http://arbus.home.pl/zapisy2013/api/index.php";
 	private static String indexID;
@@ -68,12 +71,11 @@ public class DataFetchActivity extends Activity {
 	
 	
 	private void connectToFalseData(){
+		
 		Log.d("widget","connecting to false data");
-		FalseData falseDate =  new FalseData();
-		Widget.setSchedule(falseDate.getFalseSchedule());
+		Widget.setSchedule(new TestData().getTestSchedule());
 		
 	}
-	private String fileName = "/file.ser"; //< file with serialized data
 	private void showWidget(){
 		
 		//ustawienie pozytywnego rezultatu konfiguracji
@@ -94,12 +96,14 @@ public class DataFetchActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	
-		boolean dontShowLoginMenu = true; 
-		super.onCreate(savedInstanceState);
-		context = DataFetchActivity.this;
 		setResult(RESULT_CANCELED);  	
+		super.onCreate(savedInstanceState);
+		boolean dontShowLoginMenu = false; 
+		context = DataFetchActivity.this;
 		Intent i = getIntent();
 		Bundle extras = i.getExtras();
+		
+		//jeśli nie wiadomo jaki widget wywołał activity to koniec!
 		if (extras !=null){	
 			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
@@ -108,32 +112,24 @@ public class DataFetchActivity extends Activity {
             finish();  
 		}  
 
-//		deleteScheduleDir();// <- Don't touch me! I'm important!
+		//deleteScheduleDir();// <- Don't touch me! I'm important!
 				
-		File file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
+		file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
 		// It's true only for very first start on mobile.
 		if(!file.exists())
 			file.mkdir();	
 		// It's true when schedule exist
 		else if(file.listFiles().length != 0){
+			
 			Log.d(TAG, Integer.toString(file.listFiles().length));
 			Log.d(TAG, file.listFiles()[0].getPath());
 			loadData(file);	
-//			dontShowLoginMenu = true;
-			
-		}else{
-//			setContentView(R.layout.data_fetch_layout);
-			
-//			to restore fetching data from internet, just replace this v on this ^
-			
-//		------------	
-			saveData(file);
-//		-----------	
+			dontShowLoginMenu = true;
 		}
-		
-		if(dontShowLoginMenu){
+		if(dontShowLoginMenu)
 			showWidget();
-		}
+		else
+			setContentView(R.layout.data_fetch_layout);
 	}
 	
 	private void saveData(File file) {
@@ -204,7 +200,7 @@ public class DataFetchActivity extends Activity {
 	        }
 	    }
 	}
-	public void fetch(View view){
+	public void fetchOnClick(View view){
 		
 		Log.d(TAG, "fetch");
 		EditText mName = (EditText) findViewById(R.id.usernameField);
@@ -227,6 +223,7 @@ public class DataFetchActivity extends Activity {
 			if (isNetworkAvailable()){
 				//connect();
 				connectToFalseData();
+				saveData(file);
 				showWidget();
 			}
 			else{
