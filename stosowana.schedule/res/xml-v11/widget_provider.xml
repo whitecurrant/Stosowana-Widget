@@ -7,4 +7,4 @@
     android:minResizeWidth="@dimen/minResizeWidth"
     android:minHeight="@dimen/appwidget_min_height"
     android:minWidth="@dimen/appwidget_min_width"
-    android:updatePeriodMillis="1800000" />
+    android:updatePeriodMillis="28800000" />

@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -27,7 +28,8 @@ public class Widget extends AppWidgetProvider {
 	private static final String TAG="widget";
 	private static Map<Integer, List<Subject> > schedule;
 	public static int dayNum = 0;
-
+	private	int [] containers4lowAPI = {R.id.container0, R.id.container1, R.id.container2, R.id.container3, R.id.container4};
+	private boolean dataChanged = true;
 	private static boolean lectures = true;
 	private static boolean laboratories = true;
 	private static boolean excercise = true;
@@ -35,7 +37,7 @@ public class Widget extends AppWidgetProvider {
 	
 	
 	/**
-	 * Przy okazji update'u widgetu sprawdzamy czy nie jest pusty (jeśli tak to ustawiamy pusty widok) a po sprawdzeniu 
+	 * Przy okazji update'u widgetu sprawdzamy czy nie jest pusty  a po sprawdzeniu
 	 * wersji wywołujemy odpowiednią funkcję updatującą dla każdej instancji widgetu (ktoś mógł ich dodać kilka) 
 	 */
 	@Override
@@ -46,25 +48,23 @@ public class Widget extends AppWidgetProvider {
 		Log.d(TAG, "updating...");
 
 		if (isEmpty){
-//			RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-//			for (int widgetID : appWidgetIds)
-//				awm.updateAppWidget(widgetID, rv);
 			return;			
 		}
-		
+		updateCurrentDay();
 		List<Subject> dayList = schedule.get(dayNum); 
 		
 		if (Build.VERSION.SDK_INT >= 12) {
-			Log.d(TAG, "for api 11");
+			Log.d(TAG, "for api >= 12");
 			for (int widgetID : appWidgetIds)
-				updateWidgetAPI11(awm, widgetID);
+				updateWidget4highAPI(awm, widgetID);
 		} else {
-			Log.d(TAG, "for api 10");
+			Log.d(TAG, "for api  < 12");
 			for (int widgetID : appWidgetIds)
-				updateWidgetAPI10(awm, widgetID, dayList);
+				updateWidget4lowAPI(awm, widgetID, dayList);
 		}
 		super.onUpdate(context, awm, appWidgetIds);
 	}
+	
 	private void updateCurrentDay(){
 		
 		Calendar c = Calendar.getInstance();
@@ -75,86 +75,28 @@ public class Widget extends AppWidgetProvider {
 	/**
 	 * Dla starszych wersji ręcznie tworzymy widok 'listy' i wypełniamy pola dla każdego przedmiotu
 	 */
-	private void updateWidgetAPI10(AppWidgetManager awm, int appWidgetId, List<Subject> dayList) {
+	private void updateWidget4lowAPI(AppWidgetManager awm, int appWidgetId, List<Subject> dayList) {
 
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-		//usuwamy poprzednie widoki
-		views.removeAllViews(R.id.container);
-		
+	
 		setButtonListeners(views, appWidgetId);
-		for (Subject sub : dayList) {
-
-			RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
-			innerView.setTextViewText(R.id.row_time, sub.getStartTime() + " - " + sub.getStopTime());
-			innerView.setTextViewText(R.id.row_label, sub.toString());
-			views.addView(R.id.container, innerView);
+		
+		for(int i = 0 ; i <5 ; i++ ){
+			
+			List<Subject> oneDayList = schedule.get(i);
+			for (Subject sub : oneDayList){
+				
+				RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
+				innerView.setTextViewText(R.id.row_time, sub.getStartTime() + " - " + sub.getStopTime());
+				innerView.setTextViewText(R.id.row_label, sub.toString());
+				views.addView(containers4lowAPI[i], innerView);
+			}
+			views.setViewVisibility(containers4lowAPI[i], View.GONE);
 		}
+		views.setViewVisibility(containers4lowAPI[dayNum], View.VISIBLE);
 		awm.updateAppWidget(appWidgetId, views);
 	}
-
-
-	@TargetApi(12)
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		
-		
-		if(intent.getAction().equals(SHOW_NEXT) || intent.getAction().equals(SHOW_PREV) ){
-			
-			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.main_widget_layout);
-
-			if (intent.getAction().equals(SHOW_NEXT)){
-				
-				dayNum = (++dayNum)%5;
-		
-			}
-			else{
-				
-				dayNum = (--dayNum+5)%5;
-			
-			}
-			if (Build.VERSION.SDK_INT >= 12){
-
-				final ComponentName cn = new ComponentName(context,Widget.class);
-		        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-		        remoteViews.setDisplayedChild(R.id.flipper, dayNum);
-		        int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-		        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-		        appWidgetManager.updateAppWidget(cn, remoteViews);
-			}   
-			else{
-				//zeby wymusic funkcję onUpdate z super trzeba zmodyfikowac intent
-				intent  = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, Widget.class);
-				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, Widget.class)));
-			}
-		}
-		super.onReceive(context, intent);
-	}
-
-	@Override
-	public void onDeleted(Context context, int[] appWidgetIds) {
-
-		super.onDeleted(context, appWidgetIds);
-		Toast.makeText(context, "pff, obyś nie zdał(a)!!", Toast.LENGTH_LONG).show();
-
-	}
-	private void setButtonListeners(RemoteViews remoteViews, int appWidgetId){
-		
-		Intent intentNext = new Intent(context,Widget.class);
-		Intent intentPrev = new Intent(context,Widget.class);
-		Intent intentMenu = new Intent(context,MenuActivity.class);
-
-		intentNext.setAction(SHOW_NEXT);
-		intentNext.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		intentPrev.setAction(SHOW_PREV);
-		intentPrev.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
-		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
-		PendingIntent pMenu = PendingIntent.getActivity(context, 0, intentMenu, 0);
-
-		remoteViews.setOnClickPendingIntent(R.id.right_arrow_btn, pIntentNext);
-		remoteViews.setOnClickPendingIntent(R.id.left_arrow_btn, pIntentPrev);
-		remoteViews.setOnClickPendingIntent(R.id.settings_bttn, pMenu);
-	}
+	
 	/**
 	 * Wypełnienie widoku dla nowszych wersji poprzez ustawienie adaptera (RemoteViewsProvider to obudowany adapter)
 	 * dla ListView  za pomocą WidgetService. Adapter pobiera dane, tworzy i zwraca widoki (RemoteViews) automatycznie
@@ -162,7 +104,7 @@ public class Widget extends AppWidgetProvider {
 	 */
 	@TargetApi(12)
 	@SuppressWarnings("deprecation")
-	private void updateWidgetAPI11(AppWidgetManager awm, int appWidgetId) {
+	private void updateWidget4highAPI(AppWidgetManager awm, int appWidgetId) {
 
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 		
@@ -184,6 +126,64 @@ public class Widget extends AppWidgetProvider {
 		awm.updateAppWidget(appWidgetId, remoteViews);
 		Log.d("widget", "finishing update");
 	}
+
+	@TargetApi(12)
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		
+		if(intent.getAction().equals(SHOW_NEXT) || intent.getAction().equals(SHOW_PREV) ){
+			
+			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.main_widget_layout);
+			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+			int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+			final ComponentName cn = new ComponentName(context,Widget.class);
+
+			if (intent.getAction().equals(SHOW_NEXT)){
+				
+				dayNum = (++dayNum)%5;
+				Log.d(TAG, "showing next..");
+			}
+			else{
+				
+				dayNum = (--dayNum+5)%5;
+				Log.d(TAG, "showing prev..");
+			}
+			if (Build.VERSION.SDK_INT >= 12){
+
+		        remoteViews.setDisplayedChild(R.id.flipper, dayNum);
+			}   
+			else{
+				
+				for (int id : containers4lowAPI){
+					remoteViews.setViewVisibility(id, View.GONE);
+				}
+				remoteViews.setViewVisibility(containers4lowAPI[dayNum], View.VISIBLE);
+			}
+			appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+			appWidgetManager.updateAppWidget(cn, remoteViews);
+		}
+		super.onReceive(context, intent);
+	}
+
+	private void setButtonListeners(RemoteViews remoteViews, int appWidgetId){
+		
+		Intent intentNext = new Intent(context,Widget.class);
+		Intent intentPrev = new Intent(context,Widget.class);
+		Intent intentMenu = new Intent(context,MenuActivity.class);
+
+		intentNext.setAction(SHOW_NEXT);
+		intentNext.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		intentPrev.setAction(SHOW_PREV);
+		intentPrev.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
+		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
+		PendingIntent pMenu = PendingIntent.getActivity(context, 0, intentMenu, 0);
+
+		remoteViews.setOnClickPendingIntent(R.id.right_arrow_btn, pIntentNext);
+		remoteViews.setOnClickPendingIntent(R.id.left_arrow_btn, pIntentPrev);
+		remoteViews.setOnClickPendingIntent(R.id.settings_bttn, pMenu);
+	}
+	
 	public static void setSchedule(Map<Integer, List<Subject> > schedule){
 		
 		Widget.schedule = schedule;
@@ -214,5 +214,13 @@ public class Widget extends AppWidgetProvider {
 	}
 	public static void setExcercise(boolean excercise) {
 		Widget.excercise = excercise;
+	}
+	
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds) {
+
+		super.onDeleted(context, appWidgetIds);
+		Toast.makeText(context, "pff, obyś nie zdał(a)!!", Toast.LENGTH_LONG).show();
+
 	}
 }
