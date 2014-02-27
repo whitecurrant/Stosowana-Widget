@@ -31,14 +31,22 @@
             android:label="@string/app_name">
             <intent-filter>  
           		<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />  
-      		</intent-filter>
+       		</intent-filter>
         </activity>
         <service
    			android:name="stosowana.schedule.WidgetService"
   			android:permission="android.permission.BIND_REMOTEVIEWS" />
-         <service
-   			android:name="stosowana.schedule.FlipViewService"
-  			android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <service android:name="UpdateService"></service>
+        <activity 
+            android:name="stosowana.schedule.MenuActivity"
+            android:label="@string/app_name"
+            >
+            <intent-filter >
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>          
+        </activity>
+            
    		
    </application>
 

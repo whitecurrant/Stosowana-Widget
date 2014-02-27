@@ -10,6 +10,12 @@
     <string name="test">Test</string>
     <string name="settings_bttn">Pobieranie danych</string>
     <string name="emptyList">brak elementów</string>
-    
+
+    <string name="menu_button2">Inne opcje (nieaktywne)</string>
+    <string name="menu_button1">Pobierz ponownie plan</string>
+    <string name="check_box1">Wykłady</string>
+    <string name="check_box2">Laboratoria</string>
+    <string name="check_box3">Ćwiczenia</string>
+    <string name="boxLabel">Pokazywane elementy</string>
 
 </resources>

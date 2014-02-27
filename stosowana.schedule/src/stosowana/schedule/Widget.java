@@ -27,8 +27,10 @@ public class Widget extends AppWidgetProvider {
 	private static final String TAG="widget";
 	private static Map<Integer, List<Subject> > schedule;
 	public static int dayNum = 0;
-	
-	private RemoteViews mRemoteViews;
+
+	private static boolean lectures = true;
+	private static boolean laboratories = true;
+	private static boolean excercise = true;
 	
 	
 	
@@ -44,15 +46,13 @@ public class Widget extends AppWidgetProvider {
 		Log.d(TAG, "updating...");
 
 		if (isEmpty){
-			RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-			for (int widgetID : appWidgetIds)
-				awm.updateAppWidget(widgetID, rv);
+//			RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
+//			for (int widgetID : appWidgetIds)
+//				awm.updateAppWidget(widgetID, rv);
 			return;			
 		}
 		
 		List<Subject> dayList = schedule.get(dayNum); 
-		Log.d(TAG, "day nr " + dayNum);
-		Log.d(TAG, dayList.toString());
 		
 		if (Build.VERSION.SDK_INT >= 12) {
 			Log.d(TAG, "for api 11");
@@ -75,21 +75,13 @@ public class Widget extends AppWidgetProvider {
 	/**
 	 * Dla starszych wersji ręcznie tworzymy widok 'listy' i wypełniamy pola dla każdego przedmiotu
 	 */
-	private void updateWidgetAPI10(AppWidgetManager awm, int widgetID, List<Subject> dayList) {
+	private void updateWidgetAPI10(AppWidgetManager awm, int appWidgetId, List<Subject> dayList) {
 
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 		//usuwamy poprzednie widoki
 		views.removeAllViews(R.id.container);
-		// ustawiamy intenty opakowane w pending intenty i przypisujemy do przycisków
-		Intent intentNext = new Intent(context,Widget.class);
-		Intent intentPrev = new Intent(context,Widget.class);
-		intentNext.setAction(SHOW_NEXT);
-		intentPrev.setAction(SHOW_PREV);
-		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
-		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
-		views.setOnClickPendingIntent(R.id.right_arrow_btn, pIntentNext);
-		views.setOnClickPendingIntent(R.id.left_arrow_btn, pIntentPrev);
-		//wypełniamy widoki listy
+		
+		setButtonListeners(views, appWidgetId);
 		for (Subject sub : dayList) {
 
 			RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
@@ -97,14 +89,13 @@ public class Widget extends AppWidgetProvider {
 			innerView.setTextViewText(R.id.row_label, sub.toString());
 			views.addView(R.id.container, innerView);
 		}
-		awm.updateAppWidget(widgetID, views);
+		awm.updateAppWidget(appWidgetId, views);
 	}
 
 
 	@TargetApi(12)
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		
 		
 		
 		if(intent.getAction().equals(SHOW_NEXT) || intent.getAction().equals(SHOW_PREV) ){
@@ -114,15 +105,12 @@ public class Widget extends AppWidgetProvider {
 			if (intent.getAction().equals(SHOW_NEXT)){
 				
 				dayNum = (++dayNum)%5;
-				Intent i = new Intent(context,AnimHelperService.class);
-				i.putExtra("direction", 1);
-				context.startService(i);
+		
 			}
 			else{
+				
 				dayNum = (--dayNum+5)%5;
-				Intent i = new Intent(context,AnimHelperService.class);
-				i.putExtra("direction", -1);
-				context.startService(i);
+			
 			}
 			if (Build.VERSION.SDK_INT >= 12){
 
@@ -146,21 +134,26 @@ public class Widget extends AppWidgetProvider {
 	public void onDeleted(Context context, int[] appWidgetIds) {
 
 		super.onDeleted(context, appWidgetIds);
-		Toast.makeText(context, "sam się usuń!!", Toast.LENGTH_LONG).show();
+		Toast.makeText(context, "pff, obyś nie zdał(a)!!", Toast.LENGTH_LONG).show();
 
 	}
 	private void setButtonListeners(RemoteViews remoteViews, int appWidgetId){
 		
 		Intent intentNext = new Intent(context,Widget.class);
 		Intent intentPrev = new Intent(context,Widget.class);
+		Intent intentMenu = new Intent(context,MenuActivity.class);
+
 		intentNext.setAction(SHOW_NEXT);
 		intentNext.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		intentPrev.setAction(SHOW_PREV);
 		intentPrev.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
 		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
+		PendingIntent pMenu = PendingIntent.getActivity(context, 0, intentMenu, 0);
+
 		remoteViews.setOnClickPendingIntent(R.id.right_arrow_btn, pIntentNext);
 		remoteViews.setOnClickPendingIntent(R.id.left_arrow_btn, pIntentPrev);
+		remoteViews.setOnClickPendingIntent(R.id.settings_bttn, pMenu);
 	}
 	/**
 	 * Wypełnienie widoku dla nowszych wersji poprzez ustawienie adaptera (RemoteViewsProvider to obudowany adapter)
@@ -187,12 +180,12 @@ public class Widget extends AppWidgetProvider {
 			remoteViews.setEmptyView(listViewList[i], R.id.empty_listView);
 			
 		}
-		mRemoteViews = remoteViews;
 		remoteViews.setDisplayedChild(R.id.flipper, dayNum);
 		awm.updateAppWidget(appWidgetId, remoteViews);
 		Log.d("widget", "finishing update");
 	}
 	public static void setSchedule(Map<Integer, List<Subject> > schedule){
+		
 		Widget.schedule = schedule;
 		for(List<Subject> dayList : schedule.values()){
 			
@@ -203,5 +196,23 @@ public class Widget extends AppWidgetProvider {
 	}
 	public static Map<Integer, List<Subject> > getSchedule(){
 		return Widget.schedule;
+	}
+	public static boolean isLectures() {
+		return lectures;
+	}
+	public static void setLectures(boolean lectures) {
+		Widget.lectures = lectures;
+	}
+	public static boolean isLaboratories() {
+		return laboratories;
+	}
+	public static void setLaboratories(boolean laboratories) {
+		Widget.laboratories = laboratories;
+	}
+	public static boolean isExcercise() {
+		return excercise;
+	}
+	public static void setExcercise(boolean excercise) {
+		Widget.excercise = excercise;
 	}
 }

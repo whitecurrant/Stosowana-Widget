@@ -46,7 +46,7 @@ import com.json.parsers.JsonParserFactory;
 
 public class DataFetchActivity extends Activity {
 	
-	private static final String TAG="widget"; //< It's useful in debugging
+	private static final String TAG="DataFetchActivity"; //< It's useful in debugging
 	
 	private int widgetID;
 	private Context context;
@@ -102,34 +102,42 @@ public class DataFetchActivity extends Activity {
 		context = DataFetchActivity.this;
 		Intent i = getIntent();
 		Bundle extras = i.getExtras();
+		boolean login = false;
+		
+		
 		
 		//jeśli nie wiadomo jaki widget wywołał activity to koniec!
-		if (extras !=null){	
-			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+		if (extras != null){	
+			if(extras.containsKey("LOGIN"))
+				login = extras.getBoolean("LOGIN");
+			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);	
 		}
 		else {  
 			Log.d("widget", "invalid ID!");
             finish();  
 		}  
 
-		deleteScheduleDir();// <- Don't touch me! I'm important!
+		//deleteScheduleDir();// <- Don't touch me! I'm important!
 				
 		file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
 		// It's true only for very first start on mobile.
 		if(!file.exists())
 			file.mkdir();	
 		// It's true when schedule exist
-		else if(file.listFiles().length != 0){
+		else if(file.listFiles().length != 0 && !login){
 			
 			Log.d(TAG, Integer.toString(file.listFiles().length));
 			Log.d(TAG, file.listFiles()[0].getPath());
 			loadData(file);	
 			dontShowLoginMenu = true;
 		}
-		if(dontShowLoginMenu)
+		if(dontShowLoginMenu && !login)
 			showWidget();
-		else
+		else{
 			setContentView(R.layout.data_fetch_layout);
+			if (!isNetworkAvailable())
+				Toast.makeText(context, "Uwaga, brak dostępu do internetu!", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	private void saveData(File file) {
