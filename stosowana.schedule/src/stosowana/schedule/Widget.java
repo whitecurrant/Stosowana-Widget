@@ -28,6 +28,8 @@ public class Widget extends AppWidgetProvider {
 	private static Map<Integer, List<Subject> > schedule;
 	public static int dayNum = 0;
 	
+	private RemoteViews mRemoteViews;
+	
 	
 	
 	/**
@@ -49,7 +51,6 @@ public class Widget extends AppWidgetProvider {
 		}
 		
 		List<Subject> dayList = schedule.get(dayNum); 
-		Collections.sort(dayList);
 		Log.d(TAG, "day nr " + dayNum);
 		Log.d(TAG, dayList.toString());
 		
@@ -99,38 +100,45 @@ public class Widget extends AppWidgetProvider {
 		awm.updateAppWidget(widgetID, views);
 	}
 
+
 	@TargetApi(12)
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
-		if(intent.getAction().equals(SHOW_NEXT)){
-			
-			Log.d(TAG, "showing next");
-			dayNum = (++dayNum)%5;
-			int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-			RemoteViews flipper = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-			//flipper.showNext(R.id.flipper);
-			flipper.setDisplayedChild(R.id.flipper, dayNum);
-			AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, flipper);
-
-			
-			//zeby wymusic funkcję onUpdate z super trzeba zmodyfikowac intent
-			//intent  = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, Widget.class);
-			//intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, Widget.class)));
-		}
-		else if (intent.getAction().equals(SHOW_PREV)){
-			
-			Log.d(TAG, "showing previous");
-			dayNum = (--dayNum+5)%5;
-//			intent  = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, Widget.class);
-//			intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, Widget.class)));
-			int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-			RemoteViews flipper = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-			//flipper.showNext(R.id.flipper);
-			flipper.setDisplayedChild(R.id.flipper, dayNum);
-			AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, flipper);
-		}
 		
+		
+		if(intent.getAction().equals(SHOW_NEXT) || intent.getAction().equals(SHOW_PREV) ){
+			
+			RemoteViews remoteViews = new RemoteViews(context.getPackageName(),R.layout.main_widget_layout);
+
+			if (intent.getAction().equals(SHOW_NEXT)){
+				
+				dayNum = (++dayNum)%5;
+				Intent i = new Intent(context,AnimHelperService.class);
+				i.putExtra("direction", 1);
+				context.startService(i);
+			}
+			else{
+				dayNum = (--dayNum+5)%5;
+				Intent i = new Intent(context,AnimHelperService.class);
+				i.putExtra("direction", -1);
+				context.startService(i);
+			}
+			if (Build.VERSION.SDK_INT >= 12){
+
+				final ComponentName cn = new ComponentName(context,Widget.class);
+		        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+		        remoteViews.setDisplayedChild(R.id.flipper, dayNum);
+		        int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+		        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+		        appWidgetManager.updateAppWidget(cn, remoteViews);
+			}   
+			else{
+				//zeby wymusic funkcję onUpdate z super trzeba zmodyfikowac intent
+				intent  = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, context, Widget.class);
+				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, Widget.class)));
+			}
+		}
 		super.onReceive(context, intent);
 	}
 
@@ -140,6 +148,19 @@ public class Widget extends AppWidgetProvider {
 		super.onDeleted(context, appWidgetIds);
 		Toast.makeText(context, "sam się usuń!!", Toast.LENGTH_LONG).show();
 
+	}
+	private void setButtonListeners(RemoteViews remoteViews, int appWidgetId){
+		
+		Intent intentNext = new Intent(context,Widget.class);
+		Intent intentPrev = new Intent(context,Widget.class);
+		intentNext.setAction(SHOW_NEXT);
+		intentNext.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		intentPrev.setAction(SHOW_PREV);
+		intentPrev.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
+		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
+		remoteViews.setOnClickPendingIntent(R.id.right_arrow_btn, pIntentNext);
+		remoteViews.setOnClickPendingIntent(R.id.left_arrow_btn, pIntentPrev);
 	}
 	/**
 	 * Wypełnienie widoku dla nowszych wersji poprzez ustawienie adaptera (RemoteViewsProvider to obudowany adapter)
@@ -151,17 +172,9 @@ public class Widget extends AppWidgetProvider {
 	private void updateWidgetAPI11(AppWidgetManager awm, int appWidgetId) {
 
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-		Intent intentNext = new Intent(context,Widget.class);
-		Intent intentPrev = new Intent(context,Widget.class);
-		intentNext.setAction(SHOW_NEXT);
-		intentNext.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		intentPrev.setAction(SHOW_PREV);
-		intentPrev.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-
-		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
-		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
-		remoteViews.setOnClickPendingIntent(R.id.right_arrow_btn, pIntentNext);
-		remoteViews.setOnClickPendingIntent(R.id.left_arrow_btn, pIntentPrev);
+		
+		setButtonListeners(remoteViews, appWidgetId);
+		
 		int [] listViewList = { R.id.listView0, R.id.listView1, R.id.listView2, R.id.listView3, R.id.listView4};
 		for (int i = 0 ; i<5;i++){
 			
@@ -174,13 +187,18 @@ public class Widget extends AppWidgetProvider {
 			remoteViews.setEmptyView(listViewList[i], R.id.empty_listView);
 			
 		}
-		//remoteViews.setEmptyView(R.id.flipper, R.id.empty_view);
-		remoteViews.setDisplayedChild(R.id.flipper, 4);
+		mRemoteViews = remoteViews;
+		remoteViews.setDisplayedChild(R.id.flipper, dayNum);
 		awm.updateAppWidget(appWidgetId, remoteViews);
 		Log.d("widget", "finishing update");
 	}
 	public static void setSchedule(Map<Integer, List<Subject> > schedule){
 		Widget.schedule = schedule;
+		for(List<Subject> dayList : schedule.values()){
+			
+			Collections.sort(dayList);
+
+		}
 		isEmpty = false;
 	}
 	public static Map<Integer, List<Subject> > getSchedule(){

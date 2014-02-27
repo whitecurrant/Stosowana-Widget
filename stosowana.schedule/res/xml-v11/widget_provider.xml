@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="stosowana.schedule.DataFetchActivity"
+    android:initialLayout="@layout/main_widget_layout"
+    android:minResizeHeight="@dimen/minResizeHeight"
+    android:resizeMode="horizontal|vertical"
+    android:minResizeWidth="@dimen/minResizeWidth"
+    android:minHeight="@dimen/appwidget_min_height"
+    android:minWidth="@dimen/appwidget_min_width"
+    android:updatePeriodMillis="1800000" />

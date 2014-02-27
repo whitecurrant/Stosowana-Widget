@@ -13,9 +13,16 @@ public class Hour implements Comparable<Hour>, Serializable {
 		this.minutes = minutes;
 	}
 	public Hour(String txt){
-		String[] s = txt.split(":");
-		hours = Integer.parseInt(s[0]);
-		minutes = Integer.parseInt(s[1]);
+		try{
+			String[] s = txt.split(":");
+			hours = Integer.parseInt(s[0]);
+			minutes = Integer.parseInt(s[1]);
+		}
+		catch(NumberFormatException ex){
+			ex.printStackTrace();
+			hours = 0;
+			minutes = 0;
+		}
 	}
 
 	@Override
