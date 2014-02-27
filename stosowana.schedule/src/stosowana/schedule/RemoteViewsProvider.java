@@ -28,7 +28,7 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 		
 		Log.d("widget", "onCreate in InnerFactory");
 		int dayNum = intent.getIntExtra("dayNum",0);
-		itemList = (ArrayList<Subject>) Widget.getSchedule().get(dayNum);
+		itemList = (ArrayList<Subject>) Widget.subjectSieve(Widget.getSchedule().get(dayNum));
 	} 
 	@Override
 	public int getCount() {

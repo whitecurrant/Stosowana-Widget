@@ -8,38 +8,60 @@
         android:id="@+id/fetchDataMenuButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/menu_button1" 
-        android:onClick="fetchData"/>
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="35dp"
+        android:onClick="fetchData"
+        android:text="@string/menu_button1" />
 
     <Button
         android:id="@+id/menu_button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="5dp"
         android:text="@string/menu_button2" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/boxLabel"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
+        android:text="@string/boxLabel"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/check_box1" />
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/boxMargin"
+            android:text="@string/check_box1" />
+
         <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/check_box2" />
+            android:id="@+id/checkBox2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/boxMargin"
+            android:text="@string/check_box2" />
+
         <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/check_box3" />
-   
+            android:id="@+id/checkBox3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/boxMargin"
+            android:text="@string/check_box3" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/boxMargin"
+            android:layout_marginRight="@dimen/boxMargin"
+            android:layout_marginTop="5dp"
+            android:onClick="updateSieve"
+            android:text="@string/save" />
 
 </LinearLayout>

@@ -12,14 +12,14 @@ public class Subject implements Comparable<Subject> , Serializable{
 	private Type type;
 	private Week week;
 	
-	public Subject(String name, String teacher,String classroom, String startTme, String stopTime){
+	public Subject(String name, String teacher,String classroom, String startTme, String stopTime, Type type){
 		
 		this.name = name;
 		this.teacher = teacher;
 		this.classroom = classroom;
 		this.startTime = new Hour(startTme);
 		this.stopTime = new Hour(stopTime);
-		this.day = day;
+		this.type = type;
 		
 		
 	}

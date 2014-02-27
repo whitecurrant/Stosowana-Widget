@@ -1,5 +1,6 @@
 package stosowana.schedule;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -26,13 +27,13 @@ public class Widget extends AppWidgetProvider {
 	public static final String SHOW_NEXT = "stosowana.schedule.SHOW_NEXT";
 	public static final String SHOW_PREV = "stosowana.schedule.SHOW_PREV";
 	private static final String TAG="widget";
-	private static Map<Integer, List<Subject> > schedule;
+	private static Map<Integer, ArrayList<Subject> > schedule;
 	public static int dayNum = 0;
 	private	int [] containers4lowAPI = {R.id.container0, R.id.container1, R.id.container2, R.id.container3, R.id.container4};
-	private boolean dataChanged = true;
-	private static boolean lectures = true;
-	private static boolean laboratories = true;
-	private static boolean excercise = true;
+	private String [] dayNames = {"Poniedziałek","Wtorek","Środa","Czwartek","Piątek"};
+	private static boolean showLectures = true;
+	private static boolean showLaboratories = true;
+	private static boolean showExcercise = true;
 	
 	
 	
@@ -51,7 +52,6 @@ public class Widget extends AppWidgetProvider {
 			return;			
 		}
 		updateCurrentDay();
-		List<Subject> dayList = schedule.get(dayNum); 
 		
 		if (Build.VERSION.SDK_INT >= 12) {
 			Log.d(TAG, "for api >= 12");
@@ -60,7 +60,7 @@ public class Widget extends AppWidgetProvider {
 		} else {
 			Log.d(TAG, "for api  < 12");
 			for (int widgetID : appWidgetIds)
-				updateWidget4lowAPI(awm, widgetID, dayList);
+				updateWidget4lowAPI(awm, widgetID);
 		}
 		super.onUpdate(context, awm, appWidgetIds);
 	}
@@ -71,11 +71,27 @@ public class Widget extends AppWidgetProvider {
 		int i = c.get(Calendar.DAY_OF_WEEK); // co dzisiaj mamy?
 		dayNum = i - 2; // niedziela = 1
 	}
+	public static ArrayList<Subject> subjectSieve( ArrayList<Subject> list){
+		
+		if(showExcercise && showLaboratories && showLectures)
+			return list;
+		@SuppressWarnings("unchecked")
+		ArrayList<Subject> copy = (ArrayList<Subject>) list.clone();
+		if (!showLaboratories)
+			for (int i = 0; i <copy.size();i++)
+				if (copy.get(i).getType() == Type.LAB)
+					copy.remove(i);
+		if (!showLectures)
+			for (int i = 0; i <copy.size();i++)
+				if (copy.get(i).getType() == Type.WYK)
+					copy.remove(i);
+		 return copy;
+	}
 	
 	/**
 	 * Dla starszych wersji ręcznie tworzymy widok 'listy' i wypełniamy pola dla każdego przedmiotu
 	 */
-	private void updateWidget4lowAPI(AppWidgetManager awm, int appWidgetId, List<Subject> dayList) {
+	private void updateWidget4lowAPI(AppWidgetManager awm, int appWidgetId) {
 
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 	
@@ -83,7 +99,8 @@ public class Widget extends AppWidgetProvider {
 		
 		for(int i = 0 ; i <5 ; i++ ){
 			
-			List<Subject> oneDayList = schedule.get(i);
+			ArrayList<Subject> oneDayList = subjectSieve(schedule.get(i));
+			
 			for (Subject sub : oneDayList){
 				
 				RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
@@ -94,6 +111,7 @@ public class Widget extends AppWidgetProvider {
 			views.setViewVisibility(containers4lowAPI[i], View.GONE);
 		}
 		views.setViewVisibility(containers4lowAPI[dayNum], View.VISIBLE);
+		views.setTextViewText(R.id.action_bar_textview, dayNames[dayNum]);
 		awm.updateAppWidget(appWidgetId, views);
 	}
 	
@@ -123,6 +141,7 @@ public class Widget extends AppWidgetProvider {
 			
 		}
 		remoteViews.setDisplayedChild(R.id.flipper, dayNum);
+		remoteViews.setTextViewText(R.id.action_bar_textview, dayNames[dayNum]);
 		awm.updateAppWidget(appWidgetId, remoteViews);
 		Log.d("widget", "finishing update");
 	}
@@ -159,6 +178,7 @@ public class Widget extends AppWidgetProvider {
 				}
 				remoteViews.setViewVisibility(containers4lowAPI[dayNum], View.VISIBLE);
 			}
+			remoteViews.setTextViewText(R.id.action_bar_textview, dayNames[dayNum]);
 			appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 			appWidgetManager.updateAppWidget(cn, remoteViews);
 		}
@@ -184,7 +204,7 @@ public class Widget extends AppWidgetProvider {
 		remoteViews.setOnClickPendingIntent(R.id.settings_bttn, pMenu);
 	}
 	
-	public static void setSchedule(Map<Integer, List<Subject> > schedule){
+	public static void setSchedule(Map<Integer, ArrayList<Subject> > schedule){
 		
 		Widget.schedule = schedule;
 		for(List<Subject> dayList : schedule.values()){
@@ -194,26 +214,26 @@ public class Widget extends AppWidgetProvider {
 		}
 		isEmpty = false;
 	}
-	public static Map<Integer, List<Subject> > getSchedule(){
+	public static Map<Integer, ArrayList<Subject> > getSchedule(){
 		return Widget.schedule;
 	}
 	public static boolean isLectures() {
-		return lectures;
+		return showLectures;
 	}
 	public static void setLectures(boolean lectures) {
-		Widget.lectures = lectures;
+		Widget.showLectures = lectures;
 	}
 	public static boolean isLaboratories() {
-		return laboratories;
+		return showLaboratories;
 	}
 	public static void setLaboratories(boolean laboratories) {
-		Widget.laboratories = laboratories;
+		Widget.showLaboratories = laboratories;
 	}
 	public static boolean isExcercise() {
-		return excercise;
+		return showExcercise;
 	}
 	public static void setExcercise(boolean excercise) {
-		Widget.excercise = excercise;
+		Widget.showExcercise = excercise;
 	}
 	
 	@Override

@@ -9,7 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="35dp"
         android:ems="10"
         android:hint="@string/hint1"
         android:inputType="numberSigned"
@@ -22,15 +24,20 @@
         android:id="@+id/passwdField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/hint2"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/fetchDataBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="@dimen/boxMargin"
         android:onClick="fetchOnClick"
         android:text="@string/dataFetchBtnTxt" />
     

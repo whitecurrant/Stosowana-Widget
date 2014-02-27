@@ -17,5 +17,6 @@
     <string name="check_box2">Laboratoria</string>
     <string name="check_box3">Ćwiczenia</string>
     <string name="boxLabel">Pokazywane elementy</string>
+    <string name="save">Zapisz</string>
 
 </resources>

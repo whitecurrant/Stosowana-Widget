@@ -117,7 +117,7 @@ public class DataFetchActivity extends Activity {
             finish();  
 		}  
 
-		deleteScheduleDir();// <- Don't touch me! I'm important!
+		//deleteScheduleDir();// <- Don't touch me! I'm important!
 				
 		file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
 		// It's true only for very first start on mobile.
@@ -177,7 +177,7 @@ public class DataFetchActivity extends Activity {
 		try{
 			fis = new FileInputStream(file.getPath() + fileName);
 			ois = new ObjectInputStream(fis);
-			Widget.setSchedule((Map<Integer, List<Subject>>) ois.readObject());
+			Widget.setSchedule((Map<Integer, ArrayList<Subject>>) ois.readObject());
 		} catch (FileNotFoundException e){
 			e.printStackTrace();
 		} catch (StreamCorruptedException e) {
@@ -247,7 +247,7 @@ public class DataFetchActivity extends Activity {
 		client = new DefaultHttpClient();
 		post = new HttpPost(REQUEST);
 		uuid = UUID.randomUUID().getMostSignificantBits();
-		Widget.setSchedule(new HashMap<Integer, List<Subject>>());
+		Widget.setSchedule(new HashMap<Integer, ArrayList<Subject>>());
 		
 		factory = JsonParserFactory.getInstance();
 		parser = factory.newJsonParser();
@@ -361,7 +361,7 @@ public class DataFetchActivity extends Activity {
 	//			Log.d(TAG, "cous");
 	//			Log.d(TAG,jsonObj.getJSONObject("schedule").getJSONArray("0").getJSONObject(0).getString("subjectName"));
 				for(int i=0; i<jsonObj.getJSONObject("schedule").length(); i++){
-						List<Subject> list = new ArrayList<Subject>();
+						ArrayList<Subject> list = new ArrayList<Subject>();
 						for (int j=0; j<jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).length();j++) {
 							Subject subject = new Subject();
 							subject.setStartTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j).getString("start"));

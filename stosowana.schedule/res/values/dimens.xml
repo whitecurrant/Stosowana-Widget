@@ -7,5 +7,6 @@
     <!-- size = (74 x n) - 2 -->
     <dimen name="appwidget_min_width">294dp</dimen>
     <dimen name="appwidget_min_height">294dp</dimen>
+    <dimen name="boxMargin">20dp</dimen>
 
 </resources>

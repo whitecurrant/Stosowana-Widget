@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,20 +59,18 @@ public class MenuActivity extends Activity {
 		finish();
 		
 	}
-
-	@Override
-	public void finish() {
-		// TODO Auto-generated method stub
-		Log.d(TAG, "finish");
+	public void updateSieve(View v){
 		
 		if(cb1 != null && cb2!= null && cb3 != null){
+			
 			Widget.setLectures(cb1.isChecked());
 			Widget.setLaboratories(cb2.isChecked());
 			Widget.setExcercise(cb3.isChecked());
 		}
-		super.finish();
+		AppWidgetManager awm = AppWidgetManager.getInstance(getApplicationContext());
+		Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, this, Widget.class);
+		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,awm.getAppWidgetIds(new ComponentName(getApplicationContext(), Widget.class)));
+		sendBroadcast(intent);
+		finish();
 	}
-
-
-		
 }

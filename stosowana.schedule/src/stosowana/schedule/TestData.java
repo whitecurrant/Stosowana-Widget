@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class TestData {
 	
-	private Map<Integer, List<Subject> > schedule; 
+	private Map<Integer, ArrayList<Subject> > schedule; 
 	
 	public TestData(){
 		
@@ -17,19 +17,21 @@ public class TestData {
 				"Systemy operacyjne","Równania różniczkowe","Bezsensowny przedmiot"};
 		String [] testLoc = { "435 B1","102 C2", "224 C2"};
 		String [] testHours = {"8:00","9:30","11:00","12:30","14:00","15:30","17:00","19:30"};
-		schedule = new HashMap<Integer, List<Subject>>();
+		schedule = new HashMap<Integer, ArrayList<Subject>>();
 		for(int i =0;i<5;i++){
-			List<Subject> testList = new ArrayList<Subject>();
+			ArrayList<Subject> testList = new ArrayList<Subject>();
 			
-			for(int j = 0;j<4;j++){
+			for(int j = 0;j<2;j++){
 				int h = rand.nextInt(testHours.length - 1);
 				testList.add(new Subject( testNames[rand.nextInt(testNames.length)], "Mróóówka", testLoc[rand.nextInt(testLoc.length)],
-						testHours[h],testHours[h+1]));
+						testHours[h],testHours[h+1],Type.LAB));
+				testList.add(new Subject( testNames[rand.nextInt(testNames.length)], "Mróóówka", testLoc[rand.nextInt(testLoc.length)],
+						testHours[h],testHours[h+1],Type.WYK));
 			} 
 			schedule.put(i,testList);
 		}				
 	}
-	public Map<Integer, List<Subject> >  getTestSchedule (){
+	public Map<Integer, ArrayList<Subject> >  getTestSchedule (){
 		return schedule;
 	}
 

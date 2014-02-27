@@ -36,10 +36,11 @@ public final class R {
         /**  size = (74 x n) - 2 
          */
         public static final int appwidget_min_width=0x7f070003;
-        public static final int minResizeHeight=0x7f070006;
+        public static final int boxMargin=0x7f070005;
+        public static final int minResizeHeight=0x7f070007;
         /**  size = (70 x n) - 30 
          */
-        public static final int minResizeWidth=0x7f070005;
+        public static final int minResizeWidth=0x7f070006;
         public static final int widget_margin=0x7f070002;
     }
     public static final class drawable {
@@ -49,10 +50,12 @@ public final class R {
     }
     public static final class id {
         public static final int action_bar=0x7f0c0005;
-        public static final int action_settings=0x7f0c0020;
-        public static final int checkBox1=0x7f0c0019;
-        public static final int checkBox2=0x7f0c001a;
-        public static final int checkBox3=0x7f0c001b;
+        public static final int action_bar_textview=0x7f0c0009;
+        public static final int action_settings=0x7f0c0022;
+        public static final int button1=0x7f0c001d;
+        public static final int checkBox1=0x7f0c001a;
+        public static final int checkBox2=0x7f0c001b;
+        public static final int checkBox3=0x7f0c001c;
         public static final int container=0x7f0c000f;
         public static final int container0=0x7f0c000a;
         public static final int container1=0x7f0c000b;
@@ -74,12 +77,12 @@ public final class R {
         public static final int menu_button2=0x7f0c0018;
         public static final int passwdField=0x7f0c0001;
         public static final int right_arrow_btn=0x7f0c0007;
-        public static final int row_label=0x7f0c001d;
-        public static final int row_time=0x7f0c001c;
+        public static final int row_label=0x7f0c001f;
+        public static final int row_time=0x7f0c001e;
         public static final int settings_bttn=0x7f0c0008;
-        public static final int textView1=0x7f0c0009;
-        public static final int textView2=0x7f0c001e;
-        public static final int textView3=0x7f0c001f;
+        public static final int textView1=0x7f0c0019;
+        public static final int textView2=0x7f0c0020;
+        public static final int textView3=0x7f0c0021;
         public static final int usernameField=0x7f0c0000;
     }
     public static final class integer {
@@ -110,6 +113,7 @@ public final class R {
         public static final int hint2=0x7f090004;
         public static final int menu_button1=0x7f09000a;
         public static final int menu_button2=0x7f090009;
+        public static final int save=0x7f09000f;
         public static final int settings_bttn=0x7f090007;
         public static final int test=0x7f090006;
         public static final int widget_text=0x7f090002;
