@@ -5,13 +5,13 @@ public enum Type {
 		
 		@Override
         public String toString() {
-            return "lab.";
+            return "lab";
         }
 	},
 	WYK {
 		@Override
         public String toString() {
-            return "wykł.";
+            return "wyk";
         }
 		
 	},CUS{

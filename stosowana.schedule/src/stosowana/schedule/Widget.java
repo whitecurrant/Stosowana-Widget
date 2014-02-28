@@ -105,6 +105,7 @@ public class Widget extends AppWidgetProvider {
 				
 				RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
 				innerView.setTextViewText(R.id.row_time, sub.getStartTime() + " - " + sub.getStopTime());
+				innerView.setTextViewText(R.id.row_type, sub.getType().toString());
 				innerView.setTextViewText(R.id.row_label, sub.toString());
 				views.addView(containers4lowAPI[i], innerView);
 			}

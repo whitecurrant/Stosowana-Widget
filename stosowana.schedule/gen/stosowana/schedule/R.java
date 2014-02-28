@@ -53,7 +53,7 @@ public final class R {
     public static final class id {
         public static final int action_bar=0x7f0c0005;
         public static final int action_bar_textview=0x7f0c0009;
-        public static final int action_settings=0x7f0c0023;
+        public static final int action_settings=0x7f0c0024;
         public static final int button1=0x7f0c001d;
         public static final int checkBox1=0x7f0c001a;
         public static final int checkBox2=0x7f0c001b;
@@ -81,11 +81,12 @@ public final class R {
         public static final int right_arrow_btn=0x7f0c0007;
         public static final int row_label=0x7f0c0020;
         public static final int row_time=0x7f0c001e;
+        public static final int row_type=0x7f0c001f;
         public static final int settings_bttn=0x7f0c0008;
         public static final int textView1=0x7f0c0019;
-        public static final int textView2=0x7f0c0021;
-        public static final int textView3=0x7f0c0022;
-        public static final int type_label=0x7f0c001f;
+        public static final int textView2=0x7f0c0022;
+        public static final int textView3=0x7f0c0023;
+        public static final int type_label=0x7f0c0021;
         public static final int usernameField=0x7f0c0000;
     }
     public static final class integer {

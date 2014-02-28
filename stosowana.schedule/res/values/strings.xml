@@ -19,6 +19,6 @@
     <string name="boxLabel">Pokazywane elementy</string>
     <string name="save">Zapisz</string>
     <string name="time_mockup">10:00 - 12:30</string>
-    <string name="test_type">lab</string>
+    <string name="test_type">wyk</string>
 
 </resources>
