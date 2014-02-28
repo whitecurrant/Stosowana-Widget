@@ -1,9 +1,10 @@
 package stosowana.schedule;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import android.util.Log;
 
 public class TestData {
 	
@@ -22,6 +23,7 @@ public class TestData {
 			ArrayList<Subject> testList = new ArrayList<Subject>();
 			
 			for(int j = 0;j<2;j++){
+				Log.d("widget", "j = " + j);
 				int h = rand.nextInt(testHours.length - 1);
 				testList.add(new Subject( testNames[rand.nextInt(testNames.length)], "Mróóówka", testLoc[rand.nextInt(testLoc.length)],
 						testHours[h],testHours[h+1],Type.LAB));
@@ -29,6 +31,7 @@ public class TestData {
 						testHours[h],testHours[h+1],Type.WYK));
 			} 
 			schedule.put(i,testList);
+			Log.d("widget","nextDay");
 		}				
 	}
 	public Map<Integer, ArrayList<Subject> >  getTestSchedule (){

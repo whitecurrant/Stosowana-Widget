@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/listview_background"
+    android:baselineAligned="false"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin" >
   		
@@ -18,46 +19,51 @@
 
 		<ImageView
 		    android:id="@+id/left_arrow_btn"
-		    android:layout_width="25dp"
-		    android:layout_height="30dp"
+		    android:layout_width="40dp"
+		    android:layout_height="match_parent"
 		    android:layout_alignParentBottom="true"
 		    android:layout_alignParentLeft="true"
 		    android:layout_alignParentTop="true"
-		    android:layout_marginLeft="5dp"
-		    android:layout_marginRight="15dp"
-		    android:alpha="0.6"
+		    android:adjustViewBounds="false"
+		    android:baselineAlignBottom="false"
+		    android:cropToPadding="false"
+		    android:focusable="true"
+		    android:paddingLeft="@dimen/arrow_padding"
+		    android:paddingRight="@dimen/arrow_padding"
+		    android:scaleType="centerInside"
 		    android:src="@drawable/arrow_left" />
 
 	    <ImageView
 	        android:id="@+id/right_arrow_btn"
-	        android:layout_width="25dp"
-	        android:layout_height="30dp"
+	        android:layout_width="40dp"
+	        android:layout_height="match_parent"
 	        android:layout_alignParentBottom="true"
 	        android:layout_alignParentRight="true"
 	        android:layout_alignParentTop="true"
-	        android:layout_marginLeft="15dp"
-	        android:layout_marginRight="5dp"
-	        android:alpha="0.6"
+	        android:paddingLeft="@dimen/arrow_padding"
+		    android:paddingRight="@dimen/arrow_padding"
 	        android:src="@drawable/arrow_right" />
-
-	    <ImageView
-	        android:id="@+id/settings_bttn"
-	        android:layout_width="wrap_content"
-	        android:layout_height="match_parent"
-	        android:layout_alignParentTop="true"
-	        android:layout_toLeftOf="@+id/right_arrow_btn"
-	        android:contentDescription="@string/settings_bttn"
-	        android:src="@android:drawable/ic_menu_manage" />
 
 	    <TextView
 	        android:id="@+id/action_bar_textview"
 	        android:layout_width="wrap_content"
 	        android:layout_height="40dp"
 	        android:layout_alignParentTop="true"
-	        android:layout_toRightOf="@+id/left_arrow_btn"
+	        android:layout_centerHorizontal="true"
 	        android:gravity="center|left"
 	        android:text="@string/app_name"
 	        android:textSize="20sp" />
+
+	    <ImageView
+	        android:id="@+id/settings_bttn"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:layout_alignParentTop="true"
+	        android:layout_toLeftOf="@+id/action_bar_textview"
+	        android:contentDescription="@string/settings_bttn"
+	        android:padding="@dimen/arrow_padding"
+	        android:scaleType="centerInside"
+	        android:src="@android:drawable/ic_menu_manage" />
 
 	</RelativeLayout>
 	

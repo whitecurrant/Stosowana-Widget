@@ -28,6 +28,8 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 		
 		Log.d("widget", "onCreate in InnerFactory");
 		int dayNum = intent.getIntExtra("dayNum",0);
+		if(Widget.getSchedule() == null)
+			return;
 		itemList = (ArrayList<Subject>) Widget.subjectSieve(Widget.getSchedule().get(dayNum));
 	} 
 	@Override

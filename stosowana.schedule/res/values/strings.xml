@@ -7,7 +7,7 @@
     <string name="hint1">Nr indeksu</string>
     <string name="hint2">Hasło:</string>
     <string name="dataFetchBtnTxt">Pobierz plan</string>
-    <string name="test">Test</string>
+    <string name="test">Programowanie Androida - jak zrobić widget</string>
     <string name="settings_bttn">Pobieranie danych</string>
     <string name="emptyList">brak elementów</string>
 
@@ -18,5 +18,7 @@
     <string name="check_box3">Ćwiczenia</string>
     <string name="boxLabel">Pokazywane elementy</string>
     <string name="save">Zapisz</string>
+    <string name="time_mockup">10:00 - 12:30</string>
+    <string name="test_type">lab</string>
 
 </resources>

@@ -117,7 +117,7 @@ public class DataFetchActivity extends Activity {
             finish();  
 		}  
 
-		//deleteScheduleDir();// <- Don't touch me! I'm important!
+		deleteScheduleDir();// <- Don't touch me! I'm important!
 				
 		file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
 		// It's true only for very first start on mobile.
