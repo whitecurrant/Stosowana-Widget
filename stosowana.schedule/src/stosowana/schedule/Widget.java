@@ -44,9 +44,10 @@ public class Widget extends AppWidgetProvider {
 	 * Przy okazji update'u widgetu sprawdzamy czy nie jest pusty  a po sprawdzeniu
 	 * wersji wywołujemy odpowiednią funkcję updatującą dla każdej instancji widgetu (ktoś mógł ich dodać kilka) 
 	 */
+	@SuppressWarnings("static-access")
 	@Override
 	public void onUpdate(Context context, AppWidgetManager awm,int[] appWidgetIds) {
-
+		
 		this.context = context;
 		
 		Log.d(TAG, "updating...");
@@ -82,18 +83,28 @@ public class Widget extends AppWidgetProvider {
 			return list;
 		@SuppressWarnings("unchecked")
 		ArrayList<Subject> copy = (ArrayList<Subject>) list.clone();
+		
 		if (!showLaboratories)
 			for (int i = 0; i <copy.size();i++)
-				if (copy.get(i).getType() == Type.LAB)
+				if (copy.get(i).getType() == Type.LAB){
 					copy.remove(i);
+					i--;
+				}
+		
 		if (!showLectures)
 			for (int i = 0; i <copy.size();i++)
-				if (copy.get(i).getType() == Type.WYK)
+				if (copy.get(i).getType() == Type.WYK){
 					copy.remove(i);
+					i--;
+				}
+		
 		if (!showCustom)
 			for (int i = 0; i <copy.size();i++)
-				if (copy.get(i).getType() == Type.CUS)
+				if (copy.get(i).getType() == Type.CUS){
 					copy.remove(i);
+					i--;
+				}
+		
 		 return copy;
 	}
 	
@@ -109,7 +120,7 @@ public class Widget extends AppWidgetProvider {
 			
 			views.removeAllViews(containers4lowAPI[i]);
 			ArrayList<Subject> oneDayList = subjectSieve(schedule.get(i));
-			
+//			Log.d(TAG, "ilość = " + Integer.toString(oneDayList.size()));
 			for (Subject sub : oneDayList){
 				
 				RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
@@ -259,12 +270,9 @@ public class Widget extends AppWidgetProvider {
 	}
 
 	public static void add(int parseInt, Subject subject) {
-		for(int i=0; i<schedule.get(Integer.valueOf(parseInt)).size(); i++)
-			if(schedule.get(Integer.valueOf(parseInt)).get(i).compareTo(subject) > 0){
-				schedule.get(Integer.valueOf(parseInt)).add(i, subject);
-				DataFetchActivity.saveData(new File(context.getFilesDir().getPath() + "/schedule"));
-				return;
-			}
 		schedule.get(Integer.valueOf(parseInt)).add(subject);
+		setSchedule(schedule);
+		DataFetchActivity.saveData(new File(context.getFilesDir().getPath() + "/schedule"));
+		
 	}
 }
