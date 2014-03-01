@@ -124,8 +124,8 @@ public class AddNewSubjectActivity extends FragmentActivity {
 		name = mName.getText().toString();
 		teacher = mTeacher.getText().toString();
 		room = mRoom.getText().toString();
-		startT = startText.toString();
-		stopT = startText.toString();
+		startT = startText.getText().toString();
+		stopT = stopText.getText().toString();
 
 		if(name.isEmpty())
 			Toast.makeText(context, "Proszę wpisać nazwę przedmiotu", Toast.LENGTH_SHORT).show();
@@ -133,9 +133,9 @@ public class AddNewSubjectActivity extends FragmentActivity {
 			Toast.makeText(context, "Proszę wpisać prowadzącego", Toast.LENGTH_SHORT).show();
 		else if(room.isEmpty())
 			Toast.makeText(context, "Proszę wpisać miejsce", Toast.LENGTH_SHORT).show();
-		else if(startT.isEmpty())
+		else if(startT.equals("-:-"))
 			Toast.makeText(context, "Proszę wybrać godzinę zajęć", Toast.LENGTH_SHORT).show();
-		else if(stopT.isEmpty())	
+		else if(stopT.equals("-:-"))	
 			Toast.makeText(context, "Proszę wybrać godzinę zajęć", Toast.LENGTH_SHORT).show();
 		else{
 			Subject subject = new Subject();
