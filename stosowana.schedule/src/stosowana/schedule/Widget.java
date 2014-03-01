@@ -142,13 +142,13 @@ public class Widget extends AppWidgetProvider {
 		
 		for (int i = 0 ; i<5;i++){
 			
+			awm.notifyAppWidgetViewDataChanged(appWidgetId, listViewList[i]);
 			Intent serviceIntent = new Intent(context, WidgetService.class);
 			serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 			serviceIntent.putExtra("dayNum", i);
 			serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 			remoteViews.setRemoteAdapter(appWidgetId, listViewList[i], serviceIntent);
 			remoteViews.setEmptyView(listViewList[i], R.id.empty_listView);
-			//awm.notifyAppWidgetViewDataChanged(appWidgetId, listViewList[i]);
 			
 		}
 		remoteViews.setDisplayedChild(R.id.flipper, dayNum);

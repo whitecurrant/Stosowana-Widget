@@ -71,21 +71,24 @@ public class MenuActivity extends Activity {
 			Widget.setLaboratories(cb2.isChecked());
 			Widget.setCustom(cb3.isChecked());
 		}
-		if (Build.VERSION.SDK_INT >= 12) {
+/*		if (Build.VERSION.SDK_INT >= 12) {
 			
+			Log.d("widget", "updating sieve for api 12");
 			for (int i = 0 ; i<5;i++){
+				
 				AppWidgetManager awm = AppWidgetManager.getInstance(getApplicationContext());
 				int appWidgetId = getIntent().getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 				awm.notifyAppWidgetViewDataChanged(appWidgetId, Widget.getListViews()[i]);
 			}
 		}
-		else{
+		else{*/
 			
+			Log.d("widget", "updating sieve for api 10");
 			AppWidgetManager awm = AppWidgetManager.getInstance(getApplicationContext());
 			Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, this, Widget.class);
 			intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,awm.getAppWidgetIds(new ComponentName(getApplicationContext(), Widget.class)));
 			sendBroadcast(intent);
-		}
+		//}
 
 		
 		finish();
