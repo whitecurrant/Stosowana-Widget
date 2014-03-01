@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/boxMargin"
         android:layout_marginRight="@dimen/boxMargin"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="10dp"
         android:onClick="fetchData"
         android:text="@string/menu_button1" />
 
@@ -38,10 +38,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:text="@string/boxLabel"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
         <CheckBox
             android:id="@+id/checkBox1"
@@ -57,6 +61,8 @@
             android:layout_marginLeft="@dimen/boxMargin"
             android:text="@string/check_box2" />
 
+    </LinearLayout>
+
         <CheckBox
             android:id="@+id/checkBox3"
             android:layout_width="wrap_content"
@@ -70,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/boxMargin"
             android:layout_marginRight="@dimen/boxMargin"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:onClick="updateSieve"
             android:text="@string/save" />
 
