@@ -2,45 +2,69 @@ package stosowana.schedule;
 
 import java.util.Calendar;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class AddNewSubjectActivity extends Activity {
+public class AddNewSubjectActivity extends FragmentActivity {
 	
-	String name,teacher,room,start,stop;
+	private String name,teacher,room;
 	int selectedDay;
+	private static String startTime = "0:00";
+	private static String stopTime = "0:00";
 
-	public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+	public static class SetTimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			// Use the current time as the default values for the picker
+		
 			final Calendar c = Calendar.getInstance();
 			int hour = c.get(Calendar.HOUR_OF_DAY);
 			int minute = c.get(Calendar.MINUTE);
-
-			// Create a new instance of TimePickerDialog and return it
 			return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
 		}
 
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			// Do something with the time chosen by the user
+			
+			startTime = hourOfDay+":"+minute;
+			TextView stTxt = (TextView) getActivity().findViewById(R.id.startTimeText);
+			stTxt.setText(startTime);
+			
 		}
 	}
+	public static class StopTimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
+		
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			
+			final Calendar c = Calendar.getInstance();
+			int hour = c.get(Calendar.HOUR_OF_DAY);
+			int minute = c.get(Calendar.MINUTE);
+			return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+		}
+
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			
+			stopTime = hourOfDay+":"+minute;
+			TextView stTxt = (TextView) getActivity().findViewById(R.id.stopTimeText);
+			stTxt.setText(stopTime);
+			
+		}
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	
@@ -65,24 +89,26 @@ public class AddNewSubjectActivity extends Activity {
 	}
 	public void setStartTime(View v){
 		
+		DialogFragment newFragment = new SetTimePickerFragment();
+	    newFragment.show(getSupportFragmentManager(), "startTimePicker");
 	}
 	public void setStopTime(View v){
 		
+		DialogFragment newFragment = new StopTimePickerFragment();
+	    newFragment.show(getSupportFragmentManager(), "stopTimePicker");
 	}
 	public void saveSubject(View view){
 		
 		Context context = this.getApplicationContext();
-		TextView mName = (TextView) findViewById(R.id.addSubject_name);
-		TextView mTeacher =(TextView) findViewById(R.id.addSubject_teacher);
-		TextView mRoom = (TextView)findViewById(R.id.addSubject_room);
+		EditText mName = (EditText) findViewById(R.id.addSubject_name);
+		EditText mTeacher =(EditText) findViewById(R.id.addSubject_teacher);
+		EditText mRoom = (EditText)findViewById(R.id.addSubject_room);
 	
 		
 		name = mName.getText().toString();
 		teacher = mTeacher.getText().toString();
 		room = mRoom.getText().toString();
-		//start = mStart.getText().toString();
-		//stop = mStop.getText().toString();
-		
+			
 		if(name == "")
 			Toast.makeText(context, "Proszę wpisać nazwę przedmiotu", Toast.LENGTH_SHORT).show();
 		else if(teacher == "")
@@ -95,10 +121,10 @@ public class AddNewSubjectActivity extends Activity {
 			subject.setName(name);
 			subject.setTeacher(teacher);
 			subject.setClassroom(room);
-			subject.setStartTime(start);
-			subject.setStopTime(stop);
+			subject.setStartTime(startTime);
+			subject.setStopTime(stopTime);
 			subject.setType("2");
-			//Widget.add(Integer.parseInt("1"), subject);
+			Widget.add(selectedDay, subject);
 			finish();
 		}
 	}

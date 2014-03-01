@@ -17,7 +17,7 @@ public enum Type {
 	},CUS{
 		@Override
         public String toString() {
-            return "cus";
+            return "ind";
         }
 		
 	}

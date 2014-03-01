@@ -17,53 +17,58 @@
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="15dp"
+                android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/addNewSubjectString"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/addNewSubjectString" />
 
             <EditText
                 android:id="@+id/addSubject_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginLeft="@dimen/boxMargin"
                 android:layout_marginRight="@dimen/boxMargin"
                 android:layout_marginTop="10dp"
+                android:layout_weight="1"
                 android:ems="10"
                 android:hint="Nazwa przedmiotu"
+                android:inputType="text"
                 android:maxLines="1" />
 
             <EditText
                 android:id="@+id/addSubject_teacher"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginLeft="@dimen/boxMargin"
                 android:layout_marginRight="@dimen/boxMargin"
                 android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:ems="10"
                 android:hint="Imię i nazwisko prowadzącego"
                 android:inputType="textPersonName"
                 android:maxLines="1" >
-
             </EditText>
 
             <EditText
                 android:id="@+id/addSubject_room"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginLeft="@dimen/boxMargin"
                 android:layout_marginRight="@dimen/boxMargin"
                 android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:ems="10"
                 android:hint="Miejsce"
+                android:inputType="text"
                 android:maxLines="1" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginLeft="@dimen/boxMargin"
-                android:layout_marginRight="@dimen/boxMargin" >
+                android:layout_marginRight="@dimen/boxMargin"
+                android:layout_weight="1" >
 
                 <Button
                     android:id="@+id/start_time_btn"
@@ -81,30 +86,58 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:onClick="setStopTime"
-                    android:text="Czas Zakończenia" />
+                    android:text="Czas zakończenia" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="@dimen/boxMargin"
+                android:layout_marginRight="@dimen/boxMargin"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/startTimeText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/stopTimeText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>
 
             <Spinner
                 android:id="@+id/day_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginLeft="@dimen/boxMargin"
                 android:layout_marginRight="@dimen/boxMargin"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="5dp"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/addSubject_save"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginLeft="@dimen/boxMargin"
                 android:layout_marginRight="@dimen/boxMargin"
                 android:layout_marginTop="10dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:onClick="saveSubject"
                 android:text="@string/save" />
-
         </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>
