@@ -25,8 +25,12 @@ public class AddNewSubjectActivity extends FragmentActivity {
 	int selectedDay;
 	private static String startTime = "0:00";
 	private static String stopTime = "0:00";
+	public static int startHour = 0;
+	public static int startMinute = 0;
 
 	public static class SetTimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+
+		
 
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -40,10 +44,13 @@ public class AddNewSubjectActivity extends FragmentActivity {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			
 			startTime = hourOfDay+":"+minute;
+			startHour = hourOfDay;
+			startMinute = minute;
 			TextView stTxt = (TextView) getActivity().findViewById(R.id.startTimeText);
 			stTxt.setText(startTime);
-			
 		}
+		
+		
 	}
 	public static class StopTimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
@@ -51,9 +58,11 @@ public class AddNewSubjectActivity extends FragmentActivity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			
-			final Calendar c = Calendar.getInstance();
-			int hour = c.get(Calendar.HOUR_OF_DAY);
-			int minute = c.get(Calendar.MINUTE);
+//			final Calendar c = Calendar.getInstance();
+//			int hour = c.get(Calendar.HOUR_OF_DAY);
+//			int minute = c.get(Calendar.MINUTE);
+			int hour = startHour + 1;
+			int minute = startMinute + 30;
 			return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
 		}
 
@@ -91,6 +100,7 @@ public class AddNewSubjectActivity extends FragmentActivity {
 		
 		DialogFragment newFragment = new SetTimePickerFragment();
 	    newFragment.show(getSupportFragmentManager(), "startTimePicker");
+	    
 	}
 	public void setStopTime(View v){
 		
@@ -108,14 +118,14 @@ public class AddNewSubjectActivity extends FragmentActivity {
 		name = mName.getText().toString();
 		teacher = mTeacher.getText().toString();
 		room = mRoom.getText().toString();
-			
-		if(name == "")
+//			nie mozna porowynwac == "", nie przynosilo pozadanego efektu
+		if(name.isEmpty())
 			Toast.makeText(context, "Proszę wpisać nazwę przedmiotu", Toast.LENGTH_SHORT).show();
-		else if(teacher == "")
+		else if(teacher.isEmpty())
 			Toast.makeText(context, "Proszę wpisać prowadzącego", Toast.LENGTH_SHORT).show();
-		else if(room == "")
+		else if(room.isEmpty())
 			Toast.makeText(context, "Proszę wpisać miejsce", Toast.LENGTH_SHORT).show();
-	
+//	czemu nie ma sprawdzenia daty oraz godziny?
 		else{
 			Subject subject = new Subject();
 			subject.setName(name);
