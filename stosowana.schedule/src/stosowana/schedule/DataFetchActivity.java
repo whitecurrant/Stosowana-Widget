@@ -47,11 +47,12 @@ import com.json.parsers.JsonParserFactory;
 public class DataFetchActivity extends Activity {
 	
 	private static final String TAG="DataFetchActivity"; //< It's useful in debugging
+//	private static String DIR = "/data/data/stosowana.schedule/files";
 	
 	private int widgetID;
 	private Context context;
 	private File file;
-	private String fileName = "/file.ser"; //< file with serialized data
+	private static String fileName = "/file.ser"; //< file with serialized data
 
 //	Zmienne odpowiedzialne za pobranie danych z REQUEST
 	private final static String REQUEST = "http://arbus.home.pl/zapisy2013/api/index.php";
@@ -105,7 +106,6 @@ public class DataFetchActivity extends Activity {
 		boolean login = false;
 		
 		
-		
 		//jeśli nie wiadomo jaki widget wywołał activity to koniec!
 		if (extras != null){	
 			if(extras.containsKey("LOGIN"))
@@ -116,8 +116,8 @@ public class DataFetchActivity extends Activity {
 			Log.d("widget", "invalid ID!");
             finish();  
 		}  
-
-		deleteScheduleDir();// <- Don't touch me! I'm important!
+//		Log.d(TAG, this.getFilesDir().getPath());
+		//deleteScheduleDir(this.getFilesDir().getPath());// <- Don't touch me! I'm important!
 				
 		file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
 		// It's true only for very first start on mobile.
@@ -140,13 +140,16 @@ public class DataFetchActivity extends Activity {
 		}
 	}
 	
-	private void saveData(File file) {
+	public static void saveData(File file) {
 		
 		Log.d(TAG, "saveData");
 		
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
-		
+		if(file.exists()){
+			deleteScheduleDir(file);
+			file.mkdir();
+		}	
 		try{
 			fos = new FileOutputStream(file.getPath() + fileName);
 			oos = new ObjectOutputStream(fos);
@@ -198,9 +201,8 @@ public class DataFetchActivity extends Activity {
 			}
 		}
 	}
-	private void deleteScheduleDir() {
-		
-		File dir = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
+	private static void deleteScheduleDir(File file) {
+		File dir = new File(file.getPath() + "/schedule");
 		if (dir.isDirectory()) {
 	        String[] children = dir.list();
 	        for (int i = 0; i < children.length; i++) {

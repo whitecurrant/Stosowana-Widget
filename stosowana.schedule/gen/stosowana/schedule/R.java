@@ -51,60 +51,70 @@ public final class R {
         public static final int ic_launcher=0x7f020003;
     }
     public static final class id {
-        public static final int action_bar=0x7f0c0005;
-        public static final int action_bar_textview=0x7f0c0009;
-        public static final int action_settings=0x7f0c0023;
-        public static final int button1=0x7f0c001d;
-        public static final int checkBox1=0x7f0c001a;
-        public static final int checkBox2=0x7f0c001b;
-        public static final int checkBox3=0x7f0c001c;
-        public static final int container=0x7f0c000f;
-        public static final int container0=0x7f0c000a;
-        public static final int container1=0x7f0c000b;
-        public static final int container2=0x7f0c000c;
-        public static final int container3=0x7f0c000d;
-        public static final int container4=0x7f0c000e;
-        public static final int empty_listView=0x7f0c0004;
-        public static final int empty_view=0x7f0c0016;
-        public static final int fetchDataBtn=0x7f0c0002;
-        public static final int fetchDataMenuButton=0x7f0c0017;
-        public static final int flipper=0x7f0c0010;
-        public static final int left_arrow_btn=0x7f0c0006;
-        public static final int listView=0x7f0c0003;
-        public static final int listView0=0x7f0c0011;
-        public static final int listView1=0x7f0c0012;
-        public static final int listView2=0x7f0c0013;
-        public static final int listView3=0x7f0c0014;
-        public static final int listView4=0x7f0c0015;
-        public static final int menu_button2=0x7f0c0018;
-        public static final int passwdField=0x7f0c0001;
-        public static final int right_arrow_btn=0x7f0c0007;
-        public static final int row_label=0x7f0c0020;
-        public static final int row_time=0x7f0c001e;
-        public static final int row_type=0x7f0c001f;
-        public static final int settings_bttn=0x7f0c0008;
-        public static final int textView1=0x7f0c0019;
-        public static final int textView2=0x7f0c0021;
-        public static final int textView3=0x7f0c0022;
-        public static final int usernameField=0x7f0c0000;
+        public static final int action_bar=0x7f0c000d;
+        public static final int action_bar_textview=0x7f0c0011;
+        public static final int action_settings=0x7f0c002b;
+        public static final int addSubject_day=0x7f0c0006;
+        public static final int addSubject_name=0x7f0c0001;
+        public static final int addSubject_room=0x7f0c0003;
+        public static final int addSubject_save=0x7f0c0007;
+        public static final int addSubject_start=0x7f0c0004;
+        public static final int addSubject_stop=0x7f0c0005;
+        public static final int addSubject_teacher=0x7f0c0002;
+        public static final int button1=0x7f0c0025;
+        public static final int button2=0x7f0c0020;
+        public static final int checkBox1=0x7f0c0022;
+        public static final int checkBox2=0x7f0c0023;
+        public static final int checkBox3=0x7f0c0024;
+        public static final int container=0x7f0c0017;
+        public static final int container0=0x7f0c0012;
+        public static final int container1=0x7f0c0013;
+        public static final int container2=0x7f0c0014;
+        public static final int container3=0x7f0c0015;
+        public static final int container4=0x7f0c0016;
+        public static final int empty_listView=0x7f0c000c;
+        public static final int empty_view=0x7f0c001e;
+        public static final int fetchDataBtn=0x7f0c000a;
+        public static final int fetchDataMenuButton=0x7f0c001f;
+        public static final int flipper=0x7f0c0018;
+        public static final int left_arrow_btn=0x7f0c000e;
+        public static final int listView=0x7f0c000b;
+        public static final int listView0=0x7f0c0019;
+        public static final int listView1=0x7f0c001a;
+        public static final int listView2=0x7f0c001b;
+        public static final int listView3=0x7f0c001c;
+        public static final int listView4=0x7f0c001d;
+        public static final int menu_button2=0x7f0c0021;
+        public static final int passwdField=0x7f0c0009;
+        public static final int right_arrow_btn=0x7f0c000f;
+        public static final int row_label=0x7f0c0028;
+        public static final int row_time=0x7f0c0026;
+        public static final int row_type=0x7f0c0027;
+        public static final int settings_bttn=0x7f0c0010;
+        public static final int textView1=0x7f0c0000;
+        public static final int textView2=0x7f0c0029;
+        public static final int textView3=0x7f0c002a;
+        public static final int usernameField=0x7f0c0008;
     }
     public static final class integer {
         public static final int maxLoginLength=0x7f080000;
     }
     public static final class layout {
-        public static final int data_fetch_layout=0x7f030000;
-        public static final int day_layout=0x7f030001;
-        public static final int inner_layout=0x7f030002;
-        public static final int main_widget_layout=0x7f030003;
-        public static final int menu_layout=0x7f030004;
-        public static final int row_layout=0x7f030005;
-        public static final int test_layout=0x7f030006;
+        public static final int add_new_subject_layout=0x7f030000;
+        public static final int data_fetch_layout=0x7f030001;
+        public static final int day_layout=0x7f030002;
+        public static final int inner_layout=0x7f030003;
+        public static final int main_widget_layout=0x7f030004;
+        public static final int menu_layout=0x7f030005;
+        public static final int row_layout=0x7f030006;
+        public static final int test_layout=0x7f030007;
     }
     public static final class menu {
         public static final int main=0x7f0b0000;
     }
     public static final class string {
         public static final int action_settings=0x7f090001;
+        public static final int addNewSubjectString=0x7f090012;
         public static final int app_name=0x7f090000;
         public static final int boxLabel=0x7f09000e;
         public static final int check_box1=0x7f09000b;

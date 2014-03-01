@@ -34,7 +34,7 @@ public class MenuActivity extends Activity {
 //		Log.d(TAG, Boolean.toString(Widget.box1));
 		boolean box1 = Widget.isLectures();
 		boolean box2 = Widget.isLaboratories();
-		boolean box3 = Widget.isExcercise();
+		boolean box3 = Widget.isCustom();
 		cb1 = (CheckBox) findViewById(R.id.checkBox1);
 		cb2 = (CheckBox) findViewById(R.id.checkBox2);
 		cb3 = (CheckBox) findViewById(R.id.checkBox3);
@@ -69,7 +69,7 @@ public class MenuActivity extends Activity {
 			
 			Widget.setLectures(cb1.isChecked());
 			Widget.setLaboratories(cb2.isChecked());
-			Widget.setExcercise(cb3.isChecked());
+			Widget.setCustom(cb3.isChecked());
 		}
 		if (Build.VERSION.SDK_INT >= 12) {
 			
@@ -89,5 +89,10 @@ public class MenuActivity extends Activity {
 
 		
 		finish();
+	}
+	
+	public void addNewSubject(View view){
+		Intent i = new Intent(this, AddNewSubjectActivity.class);
+		startActivity(i);
 	}
 }

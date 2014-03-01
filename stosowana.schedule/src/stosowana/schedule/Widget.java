@@ -1,5 +1,6 @@
 package stosowana.schedule;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -23,7 +24,7 @@ import android.widget.Toast;
 public class Widget extends AppWidgetProvider {
 
 	private String [] dayNames = {"Poniedziałek","Wtorek","Środa","Czwartek","Piątek"};
-	private Context context;
+	private static Context context;
 
 	public static int dayNum = 0;
 	public static final String SHOW_NEXT = "stosowana.schedule.SHOW_NEXT";
@@ -35,7 +36,7 @@ public class Widget extends AppWidgetProvider {
 	private	static int [] containers4lowAPI = {R.id.container0, R.id.container1, R.id.container2, R.id.container3, R.id.container4};
 	private static boolean showLectures = true;
 	private static boolean showLaboratories = true;
-	private static boolean showExcercise = true;
+	private static boolean showCustom = true;
 	
 	
 	
@@ -77,7 +78,7 @@ public class Widget extends AppWidgetProvider {
 	}
 	public static ArrayList<Subject> subjectSieve( ArrayList<Subject> list){
 		
-		if(showExcercise && showLaboratories && showLectures)
+		if(showCustom && showLaboratories && showLectures)
 			return list;
 		@SuppressWarnings("unchecked")
 		ArrayList<Subject> copy = (ArrayList<Subject>) list.clone();
@@ -88,6 +89,10 @@ public class Widget extends AppWidgetProvider {
 		if (!showLectures)
 			for (int i = 0; i <copy.size();i++)
 				if (copy.get(i).getType() == Type.WYK)
+					copy.remove(i);
+		if (!showCustom)
+			for (int i = 0; i <copy.size();i++)
+				if (copy.get(i).getType() == Type.CUS)
 					copy.remove(i);
 		 return copy;
 	}
@@ -236,11 +241,11 @@ public class Widget extends AppWidgetProvider {
 	public static void setLaboratories(boolean laboratories) {
 		Widget.showLaboratories = laboratories;
 	}
-	public static boolean isExcercise() {
-		return showExcercise;
+	public static boolean isCustom() {
+		return showCustom;
 	}
-	public static void setExcercise(boolean excercise) {
-		Widget.showExcercise = excercise;
+	public static void setCustom(boolean custom) {
+		Widget.showCustom = custom;
 	}
 	public static int [] getListViews(){
 		return listViewList;
@@ -251,5 +256,15 @@ public class Widget extends AppWidgetProvider {
 		super.onDeleted(context, appWidgetIds);
 		Toast.makeText(context, "pff, obyś nie zdał(a)!!", Toast.LENGTH_LONG).show();
 
+	}
+
+	public static void add(int parseInt, Subject subject) {
+		for(int i=0; i<schedule.get(Integer.valueOf(parseInt)).size(); i++)
+			if(schedule.get(Integer.valueOf(parseInt)).get(i).compareTo(subject) > 0){
+				schedule.get(Integer.valueOf(parseInt)).add(i, subject);
+				DataFetchActivity.saveData(new File(context.getFilesDir().getPath() + "/schedule"));
+				return;
+			}
+		schedule.get(Integer.valueOf(parseInt)).add(subject);
 	}
 }

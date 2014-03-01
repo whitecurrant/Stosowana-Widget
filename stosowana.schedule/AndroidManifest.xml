@@ -46,6 +46,14 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
             </intent-filter>          
         </activity>
+        <activity
+            android:name="stosowana.schedule.AddNewSubjectActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            
+        </activity>
             
    		
    </application>

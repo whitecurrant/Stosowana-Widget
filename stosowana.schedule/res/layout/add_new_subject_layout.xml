@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/addNewSubjectString"
+       	android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/addSubject_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nazwa przedmiotu"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="10dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/addSubject_teacher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Imię i nazwisko prowadzącego"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="5dp"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/addSubject_room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Miejsce"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="5dp"
+        android:ems="10" />
+
+    <EditText
+        android:id="@+id/addSubject_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Godzina startu hh:mm"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="5dp"
+        android:inputType="time" />
+
+    <EditText
+        android:id="@+id/addSubject_stop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Godzina końca hh:mm"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="5dp"
+        android:inputType="time" />
+
+    <EditText
+        android:id="@+id/addSubject_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Dzień tygodnia 0-poniedziałek"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:layout_marginTop="5dp"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/addSubject_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/boxMargin"
+        android:layout_marginRight="@dimen/boxMargin"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:onClick="saveSubject"
+        android:text="@string/save" />
+
+</LinearLayout>
