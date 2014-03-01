@@ -46,11 +46,13 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 	public RemoteViews getViewAt(int position) {
 		
 		RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
-		Subject item = itemList.get(position);
-		remoteView.setTextViewText(R.id.row_time, item.getStartTime() + " - " + item.getStopTime());
-		remoteView.setTextViewText(R.id.row_type, item.getType().toString());
-		remoteView.setTextViewText(R.id.row_label, item.toString());
-		Log.d("widget", "returning ListView for " + intent.getIntExtra("dayNum", -1));
+		if(position < itemList.size()){
+			Subject item = itemList.get(position);
+			remoteView.setTextViewText(R.id.row_time, item.getStartTime() + " - " + item.getStopTime());
+			remoteView.setTextViewText(R.id.row_type, item.getType().toString());
+			remoteView.setTextViewText(R.id.row_label, item.toString());
+			Log.d("widget", "returning ListView for " + intent.getIntExtra("dayNum", -1));
+		}
 		return remoteView;
 	}
 

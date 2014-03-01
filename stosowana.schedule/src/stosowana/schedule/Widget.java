@@ -259,12 +259,9 @@ public class Widget extends AppWidgetProvider {
 	}
 
 	public static void add(int parseInt, Subject subject) {
-		for(int i=0; i<schedule.get(Integer.valueOf(parseInt)).size(); i++)
-			if(schedule.get(Integer.valueOf(parseInt)).get(i).compareTo(subject) > 0){
-				schedule.get(Integer.valueOf(parseInt)).add(i, subject);
-				DataFetchActivity.saveData(new File(context.getFilesDir().getPath() + "/schedule"));
-				return;
-			}
 		schedule.get(Integer.valueOf(parseInt)).add(subject);
+		setSchedule(schedule);
+		DataFetchActivity.saveData(new File(context.getFilesDir().getPath() + "/schedule"));
+		
 	}
 }
