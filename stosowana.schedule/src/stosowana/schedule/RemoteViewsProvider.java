@@ -26,14 +26,14 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 	@Override
 	public void onCreate() {
 		
-		Log.d("widget", "onCreate in InnerFactory");
-		int dayNum = intent.getIntExtra("dayNum",0);
-		if(Widget.getSchedule() == null)
-			return;
-		itemList = (ArrayList<Subject>) Widget.subjectSieve(Widget.getSchedule().get(dayNum));
+		Log.d("widget", "onCreate in InnerFactory for intent + " + intent.getIntExtra("dayNum", -1));
+	
 	} 
 	@Override
 	public int getCount() {
+		
+		if(itemList == null)
+			Log.d("widget", "list empty in getCount for intent + "+intent.getIntExtra("dayNum", -1));
 		return itemList.size();
 	}
 	 
@@ -48,8 +48,9 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 		RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
 		Subject item = itemList.get(position);
 		remoteView.setTextViewText(R.id.row_time, item.getStartTime() + " - " + item.getStopTime());
+		remoteView.setTextViewText(R.id.row_type, item.getType().toString());
 		remoteView.setTextViewText(R.id.row_label, item.toString());
-		Log.d("widget", "returning ListView");
+		Log.d("widget", "returning ListView for " + intent.getIntExtra("dayNum", -1));
 		return remoteView;
 	}
 
@@ -75,12 +76,20 @@ public class RemoteViewsProvider implements RemoteViewsFactory {
 
 	@Override
 	public void onDataSetChanged() {
-		// TODO Auto-generated method stub
 		
+		Log.d("widget","calling onDataSetChanged for intent + "+intent.getIntExtra("dayNum", -1));		
+		int dayNum = intent.getIntExtra("dayNum",0);
+		if(Widget.getSchedule() == null){
+			Log.d("widget", "list Empty in OndataSetChanged for intent + "+intent.getIntExtra("dayNum", -1));
+			return;
+		}
+		itemList = (ArrayList<Subject>) Widget.subjectSieve(Widget.getSchedule().get(dayNum));
+		Log.d("widget", "current list" + itemList.toString());
 	}
 
 	@Override
 	public void onDestroy() {
+		Log.d("widget", "destroying factory for intent + "+intent.getIntExtra("dayNum", -1));
 		// TODO Auto-generated method stub
 		
 	}

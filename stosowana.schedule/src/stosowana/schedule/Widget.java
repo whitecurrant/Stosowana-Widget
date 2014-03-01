@@ -22,15 +22,17 @@ import android.widget.Toast;
 
 public class Widget extends AppWidgetProvider {
 
+	private String [] dayNames = {"Poniedziałek","Wtorek","Środa","Czwartek","Piątek"};
 	private Context context;
-	private static boolean isEmpty = true;
+
+	public static int dayNum = 0;
 	public static final String SHOW_NEXT = "stosowana.schedule.SHOW_NEXT";
 	public static final String SHOW_PREV = "stosowana.schedule.SHOW_PREV";
 	private static final String TAG="widget";
+	private static boolean isEmpty = true;
 	private static Map<Integer, ArrayList<Subject> > schedule;
-	public static int dayNum = 0;
-	private	int [] containers4lowAPI = {R.id.container0, R.id.container1, R.id.container2, R.id.container3, R.id.container4};
-	private String [] dayNames = {"Poniedziałek","Wtorek","Środa","Czwartek","Piątek"};
+	private	static int [] listViewList = { R.id.listView0, R.id.listView1, R.id.listView2, R.id.listView3, R.id.listView4};
+	private	static int [] containers4lowAPI = {R.id.container0, R.id.container1, R.id.container2, R.id.container3, R.id.container4};
 	private static boolean showLectures = true;
 	private static boolean showLaboratories = true;
 	private static boolean showExcercise = true;
@@ -70,6 +72,8 @@ public class Widget extends AppWidgetProvider {
 		Calendar c = Calendar.getInstance();
 		int i = c.get(Calendar.DAY_OF_WEEK); // co dzisiaj mamy?
 		dayNum = i - 2; // niedziela = 1
+		if(dayNum == 5 || dayNum == 6)
+			dayNum = 0;
 	}
 	public static ArrayList<Subject> subjectSieve( ArrayList<Subject> list){
 		
@@ -94,11 +98,11 @@ public class Widget extends AppWidgetProvider {
 	private void updateWidget4lowAPI(AppWidgetManager awm, int appWidgetId) {
 
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-	
 		setButtonListeners(views, appWidgetId);
 		
 		for(int i = 0 ; i <5 ; i++ ){
 			
+			views.removeAllViews(containers4lowAPI[i]);
 			ArrayList<Subject> oneDayList = subjectSieve(schedule.get(i));
 			
 			for (Subject sub : oneDayList){
@@ -124,21 +128,22 @@ public class Widget extends AppWidgetProvider {
 	@TargetApi(12)
 	@SuppressWarnings("deprecation")
 	private void updateWidget4highAPI(AppWidgetManager awm, int appWidgetId) {
+		
+		Log.d("widget", "one ID");
 
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 		
 		setButtonListeners(remoteViews, appWidgetId);
 		
-		int [] listViewList = { R.id.listView0, R.id.listView1, R.id.listView2, R.id.listView3, R.id.listView4};
 		for (int i = 0 ; i<5;i++){
 			
-			awm.notifyAppWidgetViewDataChanged(appWidgetId, listViewList[i]);
 			Intent serviceIntent = new Intent(context, WidgetService.class);
 			serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 			serviceIntent.putExtra("dayNum", i);
 			serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 			remoteViews.setRemoteAdapter(appWidgetId, listViewList[i], serviceIntent);
 			remoteViews.setEmptyView(listViewList[i], R.id.empty_listView);
+			//awm.notifyAppWidgetViewDataChanged(appWidgetId, listViewList[i]);
 			
 		}
 		remoteViews.setDisplayedChild(R.id.flipper, dayNum);
@@ -196,6 +201,7 @@ public class Widget extends AppWidgetProvider {
 		intentNext.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		intentPrev.setAction(SHOW_PREV);
 		intentPrev.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		intentMenu.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		PendingIntent pIntentNext = PendingIntent.getBroadcast(context, 0, intentNext, 0);
 		PendingIntent pIntentPrev = PendingIntent.getBroadcast(context, 0, intentPrev, 0);
 		PendingIntent pMenu = PendingIntent.getActivity(context, 0, intentMenu, 0);
@@ -236,7 +242,9 @@ public class Widget extends AppWidgetProvider {
 	public static void setExcercise(boolean excercise) {
 		Widget.showExcercise = excercise;
 	}
-	
+	public static int [] getListViews(){
+		return listViewList;
+	}
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds) {
 

@@ -35,9 +35,10 @@
         android:id="@+id/fetchDataBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill_vertical"
         android:layout_marginLeft="@dimen/boxMargin"
         android:layout_marginRight="@dimen/boxMargin"
-        android:layout_marginTop="@dimen/boxMargin"
+        android:layout_marginTop="40dp"
         android:onClick="fetchOnClick"
         android:text="@string/dataFetchBtnTxt" />
     
