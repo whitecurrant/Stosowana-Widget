@@ -28,16 +28,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.text.Editable;
+import android.util.AndroidRuntimeException;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -48,6 +55,7 @@ public class DataFetchActivity extends Activity {
 	
 	private static final String TAG="DataFetchActivity"; //< It's useful in debugging
 //	private static String DIR = "/data/data/stosowana.schedule/files";
+	private String ALERT_MESSAGE = "Wystąpił błąd";
 	
 	private int widgetID;
 	private Context context;
@@ -65,10 +73,15 @@ public class DataFetchActivity extends Activity {
 	private String expires = null;
 	private Long uuid;
 	private String sid;
+	private String name;
+	private String surname;
 	private String scheduleID;
 //	Parser JSON
 	private JsonParserFactory factory;
 	private JSONParser parser;
+	
+	
+	static public boolean flag = false;
 	
 	
 	private void connectToFalseData(){
@@ -78,7 +91,7 @@ public class DataFetchActivity extends Activity {
 		
 	}
 	private void showWidget(){
-		
+		Log.d(TAG, "showWidget");
 		//ustawienie pozytywnego rezultatu konfiguracji
 		Intent startIntent = new Intent(DataFetchActivity.this,Widget.class);
 		startIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
@@ -96,7 +109,7 @@ public class DataFetchActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-	
+		Log.d(TAG, "onCreate");
 		setResult(RESULT_CANCELED);  	
 		super.onCreate(savedInstanceState);
 		boolean dontShowLoginMenu = false; 
@@ -104,6 +117,7 @@ public class DataFetchActivity extends Activity {
 		Intent i = getIntent();
 		Bundle extras = i.getExtras();
 		boolean login = false;
+		
 		
 		
 		//jeśli nie wiadomo jaki widget wywołał activity to koniec!
@@ -117,17 +131,16 @@ public class DataFetchActivity extends Activity {
             finish();  
 		}  
 //		Log.d(TAG, this.getFilesDir().getPath());
-		//deleteScheduleDir(this.getFilesDir().getPath());// <- Don't touch me! I'm important!
+//		deleteScheduleDir(new File(this.getFilesDir().getPath()));// <- Don't touch me! I'm important!
 				
 		file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
 		// It's true only for very first start on mobile.
 		if(!file.exists())
 			file.mkdir();	
 		// It's true when schedule exist
-		else if(file.listFiles().length != 0 && !login){
-			
-			Log.d(TAG, Integer.toString(file.listFiles().length));
-			Log.d(TAG, file.listFiles()[0].getPath());
+		else if(file.listFiles().length != 0 && !login){	
+//			Log.d(TAG, Integer.toString(file.listFiles().length));
+//			Log.d(TAG, file.listFiles()[0].getPath());
 			loadData(file);	
 			dontShowLoginMenu = true;
 		}
@@ -139,6 +152,7 @@ public class DataFetchActivity extends Activity {
 				Toast.makeText(context, "Uwaga, brak dostępu do internetu!", Toast.LENGTH_LONG).show();
 		}
 	}
+	
 	
 	public static void saveData(File file) {
 		
@@ -189,7 +203,7 @@ public class DataFetchActivity extends Activity {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		}
+		} 
 		finally{
 			try {
 				if(ois != null)
@@ -202,6 +216,7 @@ public class DataFetchActivity extends Activity {
 		}
 	}
 	private static void deleteScheduleDir(File file) {
+		Log.d(TAG, "deleteScheduleDir");
 		File dir = new File(file.getPath() + "/schedule");
 		if (dir.isDirectory()) {
 	        String[] children = dir.list();
@@ -221,6 +236,7 @@ public class DataFetchActivity extends Activity {
 		indexID = emName.toString();
 		passwd = emPasswd.toString();
 		
+		
 		if(indexID.length() == 0 && passwd.length()==0)
 			Toast.makeText(context, "Proszę podać nr indeksu oraz hasło", Toast.LENGTH_LONG).show();
 		else if(indexID.length() != 6)
@@ -231,26 +247,39 @@ public class DataFetchActivity extends Activity {
 			Toast.makeText(context, "Proszę podać hasło", Toast.LENGTH_LONG).show();
 		else{
 			if (isNetworkAvailable()){
-				//connect();
-				connectToFalseData();
-				saveData(file);
-				showWidget();
+				
+				connect();
+				
+//				^łaczenie z serwerem ( testowanie wyjatków ) v false data
+				
+//				---
+//				connectToFalseData();
+//				saveData(file);
+//				showWidget();
+//				----
 			}
 			else{
-				Toast.makeText(context, "Brak dostępu do internetu", Toast.LENGTH_LONG).show();
-				finish();
+//				Toast.makeText(context, "Brak dostępu do internetu", Toast.LENGTH_LONG).show();
+//				finish();
+				
+//				nieprzetestowane v ale raczej będzie działać
+				ALERT_MESSAGE = "Brak dostępu do internetu";
+				displayFailureInfo();
 			}
 		}	
 	}
 
 	private void connect() {
 //		Log.d(TAG, "connect");
-		
+		if (android.os.Build.VERSION.SDK_INT > 9) {
+		      StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		      StrictMode.setThreadPolicy(policy);
+		}
 		client = new DefaultHttpClient();
 		post = new HttpPost(REQUEST);
 		uuid = UUID.randomUUID().getMostSignificantBits();
 		Widget.setSchedule(new HashMap<Integer, ArrayList<Subject>>());
-		
+		 
 		factory = JsonParserFactory.getInstance();
 		parser = factory.newJsonParser();
 	
@@ -263,32 +292,72 @@ public class DataFetchActivity extends Activity {
 			getSchedule();
 			getToken();		
 			logout();
-//			saveData(new File(this.getFilesDir().getAbsolutePath() + "/schedule"));
+			saveData(new File(this.getFilesDir().getAbsolutePath() + "/schedule"));
+			showWidget();
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			displayFailureInfo();
 		} catch (IOException e){
 			e.printStackTrace();
+			ALERT_MESSAGE = "Wystąpił błąd przy zapisie lub odczycie danych";
 			displayFailureInfo();
 		} catch (JSONException e){
-			e.printStackTrace();
+			e.printStackTrace();	
+			ALERT_MESSAGE = "Wystąpił błąd przy parsowaniu danych";
+			displayFailureInfo();
+		} catch (AndroidRuntimeException e){
+			e.printStackTrace();	
+			ALERT_MESSAGE = "Wystąpił błąd w komunikacji z serwerem";
+			displayFailureInfo();
+		}  catch (RuntimeException e){
+			e.printStackTrace();	
+			ALERT_MESSAGE = "Wystąpił błąd w komunikacji z serwerem";
 			displayFailureInfo();
 		}
 	}	
 	private void displayFailureInfo(){
-		
-		Toast.makeText(context, "Błąd połączenia", Toast.LENGTH_LONG).show();
-		finish();
+		//schowanie klawiatury
+		InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+	    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+	    
+	    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+	    builder.setTitle("Błąd!");
+	    builder.setMessage(ALERT_MESSAGE);
+	    builder.setIcon(R.drawable.horzyk);
+	    builder.setCancelable(true);
+	    builder.setPositiveButton("Ponów", new DialogInterface.OnClickListener() {		
+			@Override
+			public void onClick(DialogInterface dialog, int which) {	
+				Intent i = getIntent();
+				startActivity(i);
+				finish();
+			}
+		});
+	    builder.setNegativeButton("Wyjdź", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+//				deleteScheduleDir(new File(context.getFilesDir().getPath()));
+				finish();	
+			}
+		});
+	    AlertDialog alert = builder.create();
+	    alert.show();
+	    
 	}
+	
 	private boolean isNetworkAvailable() {
 		
 	    ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-	}
+	}	
 	private void getToken() throws ClientProtocolException, IOException {
-	
+		
+		
+//		ALERT_MESSAGE  = "hohoorzyk";
 		String line = null;
+//		if (line == null)
+//			throw new ClientProtocolException();
 		post.setEntity(new UrlEncodedFormEntity(makeGetToken()));
 		HttpResponse response = client.execute(post);
 		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
@@ -301,8 +370,8 @@ public class DataFetchActivity extends Activity {
 				break;
 			case 400:
 			case 401:
-				//kod obslugi błędow
-				break;
+				ALERT_MESSAGE = "Błąd połączenia z internetem, nie można pobrać Tokenu";
+				throw new ClientProtocolException();
 		}
 	}
 	
@@ -317,14 +386,16 @@ public class DataFetchActivity extends Activity {
 		JSONObject jsonObj = new JSONObject(line);
 		switch(Integer.parseInt(jsonObj.getString("code"))){
 			case 200:
-				//do dokonczenia, teraz biore to co jest mi potrzebne do komunikacji
 				sid = jsonObj.getString("session");
+				name = jsonObj.getString("name");
+				surname = jsonObj.getString("surname");
 //				Log.d(TAG, sid);
 				break;
 			case 400:
 			case 401:
-				//kod obslugi błędow
-				break;
+				Log.d(TAG, "Bad login or password");
+			    ALERT_MESSAGE = "Zła para login : hasło";
+			    throw new ClientProtocolException();
 		}
 	}
 
@@ -345,8 +416,8 @@ public class DataFetchActivity extends Activity {
 				break;
 			case 400:
 			case 401:
-				//kod obslugi błędow
-				break;
+				ALERT_MESSAGE = "Błąd połączenia z internetem, nie można pobrać listy planów";
+				throw new ClientProtocolException();
 		}
 	}
 
@@ -381,8 +452,8 @@ public class DataFetchActivity extends Activity {
 				break;
 			case 400:
 			case 401:
-				//kod obslugi błędow
-				break;
+				ALERT_MESSAGE = "Błąd połączenia z internetem, nie można pobrać planu";
+				throw new ClientProtocolException();
 		}
 	}
 
@@ -400,8 +471,8 @@ public class DataFetchActivity extends Activity {
 				break;
 			case 400:
 			case 401:
-				//kod obslugi błędow
-				break;
+				ALERT_MESSAGE = "Błąd połączenia z internetem, nie można wylogować";
+				throw new ClientProtocolException();
 		}
 	}
 
@@ -456,6 +527,7 @@ public class DataFetchActivity extends Activity {
 		
 		return nameValuePairs;
 	}
+	
 	
 }
 

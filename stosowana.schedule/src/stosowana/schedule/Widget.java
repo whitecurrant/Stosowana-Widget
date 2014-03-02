@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -51,7 +53,7 @@ public class Widget extends AppWidgetProvider {
 		this.context = context;
 		
 		Log.d(TAG, "updating...");
-
+		
 		if (isEmpty){
 			return;			
 		}
@@ -74,7 +76,7 @@ public class Widget extends AppWidgetProvider {
 		Calendar c = Calendar.getInstance();
 		int i = c.get(Calendar.DAY_OF_WEEK); // co dzisiaj mamy?
 		dayNum = i - 2; // niedziela = 1
-		if(dayNum == 5 || dayNum == 6)
+		if(dayNum == 5 || dayNum == -1)
 			dayNum = 0;
 	}
 	public static ArrayList<Subject> subjectSieve( ArrayList<Subject> list){
@@ -115,25 +117,28 @@ public class Widget extends AppWidgetProvider {
 
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 		setButtonListeners(views, appWidgetId);
-		
+	
 		for(int i = 0 ; i <5 ; i++ ){
 			
 			views.removeAllViews(containers4lowAPI[i]);
 			ArrayList<Subject> oneDayList = subjectSieve(schedule.get(i));
 //			Log.d(TAG, "ilość = " + Integer.toString(oneDayList.size()));
-			for (Subject sub : oneDayList){
-				
-				RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
-				innerView.setTextViewText(R.id.row_time, sub.getStartTime() + " - " + sub.getStopTime());
-				innerView.setTextViewText(R.id.row_type, sub.getType().toString());
-				innerView.setTextViewText(R.id.row_label, sub.toString());
-				views.addView(containers4lowAPI[i], innerView);
+			// to zabezpieczenie chyba nie zaszkodzi.
+			if(oneDayList != null){
+				for (Subject sub : oneDayList){
+					
+					RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
+					innerView.setTextViewText(R.id.row_time, sub.getStartTime() + " - " + sub.getStopTime());
+					innerView.setTextViewText(R.id.row_type, sub.getType().toString());
+					innerView.setTextViewText(R.id.row_label, sub.toString());
+					views.addView(containers4lowAPI[i], innerView);
+				}
+				views.setViewVisibility(containers4lowAPI[i], View.GONE);
 			}
-			views.setViewVisibility(containers4lowAPI[i], View.GONE);
+			views.setViewVisibility(containers4lowAPI[dayNum], View.VISIBLE);
+			views.setTextViewText(R.id.action_bar_textview, dayNames[dayNum]);
+			awm.updateAppWidget(appWidgetId, views);
 		}
-		views.setViewVisibility(containers4lowAPI[dayNum], View.VISIBLE);
-		views.setTextViewText(R.id.action_bar_textview, dayNames[dayNum]);
-		awm.updateAppWidget(appWidgetId, views);
 	}
 	
 	/**
