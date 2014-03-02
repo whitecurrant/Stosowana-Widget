@@ -32,6 +32,7 @@ public class TestData {
 				testList.add(new Subject( testNames[rand.nextInt(testNames.length)], "Mróóówka", testLoc[rand.nextInt(testLoc.length)],
 						testHours[h],testHours[h+1],Type.WYK));
 			} 
+	
 			schedule.put(i,testList);
 			Log.d("widget","nextDay");
 		}				

@@ -4,7 +4,6 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/listview_background"
     android:baselineAligned="false"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin" >
@@ -14,7 +13,7 @@
 	    android:id="@+id/action_bar"
 	    android:layout_width="match_parent"
 	    android:layout_height="40dp"
-	    android:background="@color/actionbar_background"
+	    android:background="@drawable/rounded_corners"
 	    android:orientation="horizontal" >
 
 		<ImageView
@@ -61,18 +60,19 @@
 	        android:layout_alignParentTop="true"
 	        android:layout_toLeftOf="@+id/action_bar_textview"
 	        android:contentDescription="@string/settings_bttn"
-	        android:padding="@dimen/arrow_padding"
+	        android:padding="5dp"
 	        android:scaleType="centerInside"
 	        android:src="@android:drawable/ic_menu_manage" />
 
 	</RelativeLayout>
 	
-	 <ViewFlipper 
+	 <ViewFlipper
 	     android:id="@+id/flipper"
 	     android:layout_width="match_parent"
 	     android:layout_height="match_parent"
 	     android:addStatesFromChildren="true"
 	     android:animateFirstView="true"
+	     android:background="@color/listview_background"
 	     android:inAnimation="@anim/slide_left_in"
 	     android:outAnimation="@anim/slide_left_out"
 	     android:splitMotionEvents="true"

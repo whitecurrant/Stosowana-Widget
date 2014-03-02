@@ -74,8 +74,9 @@ public class Widget extends AppWidgetProvider {
 		Calendar c = Calendar.getInstance();
 		int i = c.get(Calendar.DAY_OF_WEEK); // co dzisiaj mamy?
 		dayNum = i - 2; // niedziela = 1
-		if(dayNum == 5 || dayNum == 6)
+		if(dayNum == 5 || dayNum == -1)
 			dayNum = 0;
+		Log.d(TAG, dayNum + " is today");
 	}
 	public static ArrayList<Subject> subjectSieve( ArrayList<Subject> list){
 		
@@ -114,15 +115,13 @@ public class Widget extends AppWidgetProvider {
 	private void updateWidget4lowAPI(AppWidgetManager awm, int appWidgetId) {
 
 		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
-		setButtonListeners(views, appWidgetId);
 		
 		for(int i = 0 ; i <5 ; i++ ){
-			
+
 			views.removeAllViews(containers4lowAPI[i]);
 			ArrayList<Subject> oneDayList = subjectSieve(schedule.get(i));
-//			Log.d(TAG, "ilość = " + Integer.toString(oneDayList.size()));
 			for (Subject sub : oneDayList){
-				
+
 				RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
 				innerView.setTextViewText(R.id.row_time, sub.getStartTime() + " - " + sub.getStopTime());
 				innerView.setTextViewText(R.id.row_type, sub.getType().toString());
@@ -133,6 +132,8 @@ public class Widget extends AppWidgetProvider {
 		}
 		views.setViewVisibility(containers4lowAPI[dayNum], View.VISIBLE);
 		views.setTextViewText(R.id.action_bar_textview, dayNames[dayNum]);
+
+		setButtonListeners(views, appWidgetId);
 		awm.updateAppWidget(appWidgetId, views);
 	}
 	

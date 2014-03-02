@@ -21,5 +21,6 @@
     <string name="time_mockup">10:00 - 12:30</string>
     <string name="test_type">wyk</string>
     <string name="addNewSubjectString">Dodaj nowy przedmiot</string>
+    <string name="weekend">Luz, masz weekend</string>
 
 </resources>
