@@ -19,10 +19,12 @@ public class TestData {
 		String [] testLoc = { "435 B1","102 C2", "224 C2"};
 		String [] testHours = {"8:00","9:30","11:00","12:30","14:00","15:30","17:00","19:30"};
 		schedule = new HashMap<Integer, ArrayList<Subject>>();
+		
 		for(int i =0;i<5;i++){
 			ArrayList<Subject> testList = new ArrayList<Subject>();
 			
 			for(int j = 0;j<2;j++){
+				
 				Log.d("widget", "j = " + j);
 				int h = rand.nextInt(testHours.length - 1);
 				testList.add(new Subject( testNames[rand.nextInt(testNames.length)], "Mróóówka", testLoc[rand.nextInt(testLoc.length)],
@@ -30,6 +32,7 @@ public class TestData {
 				testList.add(new Subject( testNames[rand.nextInt(testNames.length)], "Mróóówka", testLoc[rand.nextInt(testLoc.length)],
 						testHours[h],testHours[h+1],Type.WYK));
 			} 
+	
 			schedule.put(i,testList);
 			Log.d("widget","nextDay");
 		}				

@@ -20,6 +20,11 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        /**     <color name="actionbar_background">#6E2D00</color>
+    <color name="listview_background">#6E6E6E</color>
+    <color name="arrow_color">#FFFFFF</color>
+    <color name="transparent">#00000000</color> 
+         */
         public static final int actionbar_background=0x7f060000;
         public static final int arrow_color=0x7f060002;
         public static final int listview_background=0x7f060001;
@@ -51,8 +56,13 @@ public final class R {
         public static final int arrow_left=0x7f020000;
         public static final int arrow_right=0x7f020001;
         public static final int bottom_line=0x7f020002;
+<<<<<<< HEAD
         public static final int horzyk=0x7f020003;
         public static final int ic_launcher=0x7f020004;
+=======
+        public static final int ic_launcher=0x7f020003;
+        public static final int rounded_corners=0x7f020004;
+>>>>>>> refs/remotes/origin/master
     }
     public static final class id {
         public static final int action_bar=0x7f0d0010;
@@ -138,6 +148,7 @@ public final class R {
         public static final int test=0x7f0a0006;
         public static final int test_type=0x7f0a0011;
         public static final int time_mockup=0x7f0a0010;
+        public static final int weekend=0x7f0a0013;
         public static final int widget_text=0x7f0a0002;
     }
     public static final class style {
