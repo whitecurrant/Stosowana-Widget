@@ -277,4 +277,7 @@ public class Widget extends AppWidgetProvider {
 		DataFetchActivity.saveData(new File(context.getFilesDir().getPath() + "/schedule"));
 		
 	}
+	public static void setEmpty(){
+		isEmpty = true;
+	}
 }
