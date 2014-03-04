@@ -1,4 +1,3 @@
- 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -7,109 +6,107 @@
     android:baselineAligned="false"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin" >
-  		
-	<RelativeLayout
 
-	    android:id="@+id/action_bar"
-	    android:layout_width="match_parent"
-	    android:layout_height="40dp"
-	    android:background="@drawable/rounded_corners"
-	    android:orientation="horizontal" >
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_corners"
+        android:orientation="horizontal" >
 
-		<ImageView
-		    android:id="@+id/left_arrow_btn"
-		    android:layout_width="40dp"
-		    android:layout_height="match_parent"
-		    android:layout_alignParentBottom="true"
-		    android:layout_alignParentLeft="true"
-		    android:layout_alignParentTop="true"
-		    android:adjustViewBounds="false"
-		    android:baselineAlignBottom="false"
-		    android:cropToPadding="false"
-		    android:focusable="true"
-		    android:paddingLeft="@dimen/arrow_padding"
-		    android:paddingRight="@dimen/arrow_padding"
-		    android:scaleType="centerInside"
-		    android:src="@drawable/arrow_left" />
+        <ImageView
+            android:id="@+id/left_arrow_btn"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="false"
+            android:baselineAlignBottom="false"
+            android:cropToPadding="false"
+            android:focusable="true"
+            android:paddingLeft="@dimen/arrow_padding"
+            android:paddingRight="@dimen/arrow_padding"
+            android:scaleType="centerInside"
+            android:src="@drawable/arrow_left" />
 
-	    <ImageView
-	        android:id="@+id/right_arrow_btn"
-	        android:layout_width="40dp"
-	        android:layout_height="match_parent"
-	        android:layout_alignParentBottom="true"
-	        android:layout_alignParentRight="true"
-	        android:layout_alignParentTop="true"
-	        android:paddingLeft="@dimen/arrow_padding"
-		    android:paddingRight="@dimen/arrow_padding"
-	        android:src="@drawable/arrow_right" />
+        <ImageView
+            android:id="@+id/right_arrow_btn"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:paddingLeft="@dimen/arrow_padding"
+            android:paddingRight="@dimen/arrow_padding"
+            android:src="@drawable/arrow_right" />
 
-	    <TextView
-	        android:id="@+id/action_bar_textview"
-	        android:layout_width="wrap_content"
-	        android:layout_height="40dp"
-	        android:layout_alignParentTop="true"
-	        android:layout_centerHorizontal="true"
-	        android:gravity="center|left"
-	        android:text="@string/app_name"
-	        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/action_bar_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center|left"
+            android:text="@string/app_name"
+            android:textSize="20sp" />
 
-	    <ImageView
-	        android:id="@+id/settings_bttn"
-	        android:layout_width="wrap_content"
-	        android:layout_height="match_parent"
-	        android:layout_alignParentTop="true"
-	        android:layout_toLeftOf="@+id/action_bar_textview"
-	        android:contentDescription="@string/settings_bttn"
-	        android:padding="4dp"
-	        android:scaleType="centerInside"
-	        android:src="@android:drawable/ic_menu_manage" />
+        <ImageView
+            android:id="@+id/settings_bttn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/action_bar_textview"
+            android:contentDescription="@string/settings_bttn"
+            android:padding="4dp"
+            android:scaleType="centerInside"
+            android:src="@android:drawable/ic_menu_manage" />
+    </RelativeLayout>
 
-	</RelativeLayout>
-	
-	 <ViewFlipper
-	     android:id="@+id/flipper"
-	     android:layout_width="match_parent"
-	     android:layout_height="match_parent"
-	     android:addStatesFromChildren="true"
-	     android:animateFirstView="true"
-	     android:background="@color/listview_background"
-	     android:inAnimation="@anim/slide_left_in"
-	     android:outAnimation="@anim/slide_left_out"
-	     android:splitMotionEvents="true"
-	     android:visibility="visible" >
+    <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:addStatesFromChildren="true"
+        android:animateFirstView="true"
+        android:background="@color/listview_background"
+        android:inAnimation="@anim/slide_left_in"
+        android:outAnimation="@anim/slide_left_out"
+        android:splitMotionEvents="true"
+        android:visibility="visible" >
 
-	     <ListView
-	         android:id="@+id/listView0"
-	         android:layout_width="match_parent"
-	         android:layout_height="match_parent" >
-	     </ListView>
+        <ListView
+            android:id="@+id/listView0"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
 
-	     <ListView
-	         android:id="@+id/listView1"
-	         android:layout_width="match_parent"
-	         android:layout_height="match_parent" >
-	     </ListView>
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
 
-	     <ListView
-	         android:id="@+id/listView2"
-	         android:layout_width="match_parent"
-	         android:layout_height="match_parent" >
-	     </ListView>
+        <ListView
+            android:id="@+id/listView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
 
-	     <ListView
-	         android:id="@+id/listView3"
-	         android:layout_width="match_parent"
-	         android:layout_height="match_parent" >
-	     </ListView>
+        <ListView
+            android:id="@+id/listView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
 
-	     <ListView
-	         android:id="@+id/listView4"
-	         android:layout_width="match_parent"
-	         android:layout_height="match_parent" >
-	     </ListView>
-		
-	</ViewFlipper>
-	<TextView
+        <ListView
+            android:id="@+id/listView4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
+    </ViewFlipper>
+
+    <TextView
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -117,7 +114,5 @@
         android:textColor="#ffffff"
         android:textSize="20sp"
         android:visibility="gone" />
- 
-</LinearLayout>
-		
 
+</LinearLayout>

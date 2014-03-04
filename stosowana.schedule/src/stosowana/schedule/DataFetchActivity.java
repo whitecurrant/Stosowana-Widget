@@ -81,7 +81,7 @@ public class DataFetchActivity extends Activity {
 	// Parser JSON
 	private JsonParserFactory factory;
 	private JSONParser parser;
-
+	private Map<Integer, ArrayList<Subject>> tempMap;
 	static public boolean flag = false;
 
 	private void connectToFalseData() {
@@ -102,14 +102,11 @@ public class DataFetchActivity extends Activity {
 		startService(startIntent);
 		// to niżej to wymuszenie update'a widgeta
 		AppWidgetManager awm = AppWidgetManager.getInstance(context);
-		Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE,
-				null, this, Widget.class);
-		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, awm
-				.getAppWidgetIds(new ComponentName(getApplicationContext(),
-						Widget.class)));
+		Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, this, Widget.class);
+		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,
+				awm.getAppWidgetIds(new ComponentName(getApplicationContext(), Widget.class)));
 		sendBroadcast(intent);
 		finish();
-
 	}
 
 	@Override
@@ -128,14 +125,14 @@ public class DataFetchActivity extends Activity {
 		if (extras != null) {
 			if (extras.containsKey("LOGIN"))
 				login = extras.getBoolean("LOGIN");
-			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-					AppWidgetManager.INVALID_APPWIDGET_ID);
+			widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 		} else {
 			Log.d("widget", "invalid ID!");
 			finish();
 		}
 		Log.d(TAG, this.getFilesDir().getPath());
-		deleteScheduleDir(new File(this.getFilesDir().getPath())); // <- Don't touch me! I'm important!
+		// deleteScheduleDir(new File(this.getFilesDir().getPath())); // <-
+		// Don't touch me! I'm important!
 
 		file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
 		// It's true only for very first start on mobile.
@@ -218,7 +215,7 @@ public class DataFetchActivity extends Activity {
 	}
 
 	private static void deleteScheduleDir(File file) {
-		
+
 		Log.d(TAG, "deleteScheduleDir");
 		File dir = new File(file.getPath() + "/schedule");
 		if (dir.isDirectory()) {
@@ -241,22 +238,29 @@ public class DataFetchActivity extends Activity {
 		passwd = emPasswd.toString();
 
 		if (indexID.length() == 0 && passwd.length() == 0)
-			Toast.makeText(context, "Proszę podać nr indeksu oraz hasło",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Proszę podać nr indeksu oraz hasło", Toast.LENGTH_LONG).show();
 		else if (indexID.length() != 6)
-			Toast.makeText(context, "Niepoprawny format numeru indeksu",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Niepoprawny format numeru indeksu", Toast.LENGTH_LONG).show();
 		else if (indexID.length() == 0)
-			Toast.makeText(context, "Proszę podać nr indeksu",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Proszę podać nr indeksu", Toast.LENGTH_LONG).show();
 		else if (passwd.length() == 0)
-			Toast.makeText(context, "Proszę podać hasło",Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Proszę podać hasło", Toast.LENGTH_LONG).show();
 		else {
 			if (isNetworkAvailable()) {
-				
-				if(indexID.equals("000002"))
-					connectToFalseData();
-				else
-					connect();
 
-				showWidget();
+				if (indexID.equals("000002")){
+					connectToFalseData();
+					saveData(new File(this.getFilesDir().getAbsolutePath() + "/schedule"));
+					Toast.makeText(context, "Ładowanie danych testowych!", Toast.LENGTH_LONG).show();
+					showWidget();
+
+				}	
+				else if (indexID.equals("000003")) {
+					deleteScheduleDir(new File(this.getFilesDir().getPath()));
+					Toast.makeText(context, "Baza danych usunięta!", Toast.LENGTH_LONG).show();
+				} else{
+					connect();
+				}	
 			} else {
 				ALERT_MESSAGE = "Brak dostępu do internetu";
 				displayFailureInfo();
@@ -266,7 +270,7 @@ public class DataFetchActivity extends Activity {
 
 	@TargetApi(9)
 	private void connect() {
-		
+
 		Log.d(TAG, "connect");
 		if (Build.VERSION.SDK_INT >= 9) {
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -275,7 +279,7 @@ public class DataFetchActivity extends Activity {
 		client = new DefaultHttpClient();
 		post = new HttpPost(REQUEST);
 		uuid = UUID.randomUUID().getMostSignificantBits();
-		Widget.setSchedule(new HashMap<Integer, ArrayList<Subject>>());
+		tempMap = new HashMap<Integer, ArrayList<Subject>>();
 
 		factory = JsonParserFactory.getInstance();
 		parser = factory.newJsonParser();
@@ -289,7 +293,10 @@ public class DataFetchActivity extends Activity {
 			getSchedule();
 			getToken();
 			logout();
+			Widget.setSchedule(tempMap);
 			saveData(new File(this.getFilesDir().getAbsolutePath() + "/schedule"));
+			showWidget();
+
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			displayFailureInfo();
@@ -322,24 +329,24 @@ public class DataFetchActivity extends Activity {
 		builder.setMessage(ALERT_MESSAGE);
 		builder.setIcon(R.drawable.horzyk);
 		builder.setCancelable(true);
-		builder.setPositiveButton("Ponów",new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Widget.setEmpty();
-						Intent i = getIntent();
-						startActivity(i);
-						finish();
-					}
-				});
-		builder.setNegativeButton("Wyjdź",new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Widget.setEmpty();
-
-						// deleteScheduleDir(new File(context.getFilesDir().getPath()));
-						finish();
-					}
-				});
+		builder.setPositiveButton("Ponów", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+				Intent i = getIntent();
+				startActivity(i);
+				finish();
+			}
+		});
+		builder.setNegativeButton("Wyjdź", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+				// deleteScheduleDir(new
+				// File(context.getFilesDir().getPath()));
+				finish();
+			}
+		});
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
@@ -379,8 +386,7 @@ public class DataFetchActivity extends Activity {
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeLogin()));
 		HttpResponse response = client.execute(post);
-		in = new BufferedReader(new InputStreamReader(response.getEntity()
-				.getContent()));
+		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		line = in.readLine();
 		// Log.d(TAG+" login", line);
 		JSONObject jsonObj = new JSONObject(line);
@@ -404,8 +410,7 @@ public class DataFetchActivity extends Activity {
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeListSchedules()));
 		HttpResponse response = client.execute(post);
-		in = new BufferedReader(new InputStreamReader(response.getEntity()
-				.getContent()));
+		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		line = in.readLine();
 		// Log.d(TAG + "ListSchedue", line);
 		JSONObject jsonObj = new JSONObject(line);
@@ -413,8 +418,7 @@ public class DataFetchActivity extends Activity {
 		case 200:
 			// do dokonczenia, teraz biore to co jest mi potrzebne do
 			// komunikacji
-			scheduleID = jsonObj.getJSONArray("scheduleList").getJSONObject(0)
-					.getString("scheduleID");
+			scheduleID = jsonObj.getJSONArray("scheduleList").getJSONObject(0).getString("scheduleID");
 			// Log.d(TAG, scheduleID);
 			break;
 		case 400:
@@ -429,8 +433,7 @@ public class DataFetchActivity extends Activity {
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeGetSchedules()));
 		HttpResponse response = client.execute(post);
-		in = new BufferedReader(new InputStreamReader(response.getEntity()
-				.getContent()));
+		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		line = in.readLine();
 		JSONObject jsonObj = new JSONObject(line);
 		switch (Integer.parseInt(jsonObj.getString("code"))) {
@@ -439,34 +442,26 @@ public class DataFetchActivity extends Activity {
 			// Log.d(TAG,jsonObj.getJSONObject("schedule").getJSONArray("0").getJSONObject(0).getString("subjectName"));
 			for (int i = 0; i < jsonObj.getJSONObject("schedule").length(); i++) {
 				ArrayList<Subject> list = new ArrayList<Subject>();
-				for (int j = 0; j < jsonObj.getJSONObject("schedule")
-						.getJSONArray(Integer.toString(i)).length(); j++) {
+				for (int j = 0; j < jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).length(); j++) {
 					Subject subject = new Subject();
-					subject.setStartTime(jsonObj.getJSONObject("schedule")
-							.getJSONArray(Integer.toString(i)).getJSONObject(j)
+					subject.setStartTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
 							.getString("start"));
-					subject.setStopTime(jsonObj.getJSONObject("schedule")
-							.getJSONArray(Integer.toString(i)).getJSONObject(j)
+					subject.setStopTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
 							.getString("end"));
-					subject.setWeek(jsonObj.getJSONObject("schedule")
-							.getJSONArray(Integer.toString(i)).getJSONObject(j)
+					subject.setWeek(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
 							.getString("week"));
-					subject.setClassroom(jsonObj.getJSONObject("schedule")
-							.getJSONArray(Integer.toString(i)).getJSONObject(j)
+					subject.setClassroom(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
 							.getString("room"));
-					subject.setTeacher(jsonObj.getJSONObject("schedule")
-							.getJSONArray(Integer.toString(i)).getJSONObject(j)
+					subject.setTeacher(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
 							.getString("teacher"));
-					subject.setName(jsonObj.getJSONObject("schedule")
-							.getJSONArray(Integer.toString(i)).getJSONObject(j)
+					subject.setName(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
 							.getString("subjectName"));
-					subject.setType(jsonObj.getJSONObject("schedule")
-							.getJSONArray(Integer.toString(i)).getJSONObject(j)
+					subject.setType(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
 							.getString("type"));
 					list.add(subject);
 				}
 
-				Widget.getSchedule().put(Integer.valueOf(i), list);
+				tempMap.put(Integer.valueOf(i), list);
 			}
 			break;
 		case 400:
@@ -481,8 +476,7 @@ public class DataFetchActivity extends Activity {
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeLogout()));
 		HttpResponse response = client.execute(post);
-		in = new BufferedReader(new InputStreamReader(response.getEntity()
-				.getContent()));
+		in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		line = in.readLine();
 		Map jsonMap = parser.parseJson(line);
 		switch (Integer.parseInt(jsonMap.get("code").toString())) {

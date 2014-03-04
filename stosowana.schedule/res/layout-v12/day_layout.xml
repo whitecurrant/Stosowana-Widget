@@ -3,14 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-     <!-- ListView to be shown on widget -->
+
+    <!-- ListView to be shown on widget -->
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
- 
+
     <!-- Empty view is show if list items are empty -->
+
     <TextView
         android:id="@+id/empty_listView"
         android:layout_width="match_parent"

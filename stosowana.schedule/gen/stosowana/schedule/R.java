@@ -20,11 +20,6 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        /**     <color name="actionbar_background">#6E2D00</color>
-    <color name="listview_background">#6E6E6E</color>
-    <color name="arrow_color">#FFFFFF</color>
-    <color name="transparent">#00000000</color> 
-         */
         public static final int actionbar_background=0x7f060000;
         public static final int arrow_color=0x7f060002;
         public static final int listview_background=0x7f060001;
@@ -32,6 +27,7 @@ public final class R {
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
+ Default screen margins, per the Android Design guidelines. 
  Default screen margins, per the Android Design guidelines. 
 
          Customize dimensions originally defined in res/values/dimens.xml (such as
@@ -48,6 +44,7 @@ public final class R {
         public static final int boxMargin=0x7f070005;
         public static final int minResizeHeight=0x7f070008;
         /**  size = (70 x n) - 30 
+ size = (70 x n) - 30 
          */
         public static final int minResizeWidth=0x7f070007;
         public static final int widget_margin=0x7f070002;
@@ -63,16 +60,16 @@ public final class R {
     public static final class id {
         public static final int action_bar=0x7f0d0010;
         public static final int action_bar_textview=0x7f0d0013;
-        public static final int action_settings=0x7f0d002e;
+        public static final int action_settings=0x7f0d002d;
         public static final int addSubject_name=0x7f0d0002;
         public static final int addSubject_room=0x7f0d0004;
         public static final int addSubject_save=0x7f0d000a;
         public static final int addSubject_teacher=0x7f0d0003;
-        public static final int button1=0x7f0d0028;
+        public static final int button1=0x7f0d0027;
         public static final int button2=0x7f0d0023;
-        public static final int checkBox1=0x7f0d0025;
-        public static final int checkBox2=0x7f0d0026;
-        public static final int checkBox3=0x7f0d0027;
+        public static final int checkBox1=0x7f0d0024;
+        public static final int checkBox2=0x7f0d0025;
+        public static final int checkBox3=0x7f0d0026;
         public static final int container=0x7f0d001a;
         public static final int container0=0x7f0d0015;
         public static final int container1=0x7f0d0016;
@@ -92,12 +89,11 @@ public final class R {
         public static final int listView2=0x7f0d001e;
         public static final int listView3=0x7f0d001f;
         public static final int listView4=0x7f0d0020;
-        public static final int menu_button2=0x7f0d0024;
         public static final int passwdField=0x7f0d000c;
         public static final int right_arrow_btn=0x7f0d0012;
-        public static final int row_label=0x7f0d002b;
-        public static final int row_time=0x7f0d0029;
-        public static final int row_type=0x7f0d002a;
+        public static final int row_label=0x7f0d002a;
+        public static final int row_time=0x7f0d0028;
+        public static final int row_type=0x7f0d0029;
         public static final int scrollView1=0x7f0d0000;
         public static final int settings_bttn=0x7f0d0014;
         public static final int startTimeText=0x7f0d0007;
@@ -105,8 +101,8 @@ public final class R {
         public static final int stopTimeText=0x7f0d0008;
         public static final int stop_time_btn=0x7f0d0006;
         public static final int textView1=0x7f0d0001;
-        public static final int textView2=0x7f0d002c;
-        public static final int textView3=0x7f0d002d;
+        public static final int textView2=0x7f0d002b;
+        public static final int textView3=0x7f0d002c;
         public static final int usernameField=0x7f0d000b;
     }
     public static final class integer {
@@ -127,25 +123,22 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f0a0001;
-        public static final int add=0x7f0a0014;
-        public static final int addNewSubjectString=0x7f0a0012;
+        public static final int add=0x7f0a0011;
+        public static final int addNewSubjectString=0x7f0a000f;
         public static final int app_name=0x7f0a0000;
-        public static final int boxLabel=0x7f0a000e;
-        public static final int check_box1=0x7f0a000b;
-        public static final int check_box2=0x7f0a000c;
-        public static final int check_box3=0x7f0a000d;
+        public static final int boxLabel=0x7f0a000c;
+        public static final int check_box1=0x7f0a0009;
+        public static final int check_box2=0x7f0a000a;
+        public static final int check_box3=0x7f0a000b;
         public static final int dataFetchBtnTxt=0x7f0a0005;
-        public static final int emptyList=0x7f0a0008;
+        public static final int emptyList=0x7f0a0007;
         public static final int hint1=0x7f0a0003;
         public static final int hint2=0x7f0a0004;
-        public static final int menu_button1=0x7f0a000a;
-        public static final int menu_button2=0x7f0a0009;
-        public static final int save=0x7f0a000f;
-        public static final int settings_bttn=0x7f0a0007;
-        public static final int test=0x7f0a0006;
-        public static final int test_type=0x7f0a0011;
-        public static final int time_mockup=0x7f0a0010;
-        public static final int weekend=0x7f0a0013;
+        public static final int menu_button1=0x7f0a0008;
+        public static final int save=0x7f0a000d;
+        public static final int settings_bttn=0x7f0a0006;
+        public static final int time_mockup=0x7f0a000e;
+        public static final int weekend=0x7f0a0010;
         public static final int widget_text=0x7f0a0002;
     }
     public static final class style {

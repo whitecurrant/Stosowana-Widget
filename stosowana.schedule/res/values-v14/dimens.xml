@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="widget_margin">0dp</dimen>
+    <!-- size = (70 x n) - 30 -->
+    <dimen name="minResizeWidth">250dp</dimen>
+    <dimen name="minResizeHeight">110dp</dimen>
+    <dimen name="appwidget_min_width">250dp</dimen>
+    <dimen name="appwidget_min_height">110dp</dimen>
+
+</resources>

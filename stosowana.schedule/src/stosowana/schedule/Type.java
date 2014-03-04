@@ -1,24 +1,25 @@
 package stosowana.schedule;
 
 public enum Type {
-	LAB{
-		
+	LAB {
+
 		@Override
-        public String toString() {
-            return "lab";
-        }
+		public String toString() {
+			return "lab";
+		}
 	},
 	WYK {
 		@Override
-        public String toString() {
-            return "wyk";
-        }
-		
-	},CUS{
+		public String toString() {
+			return "wyk";
+		}
+
+	},
+	CUS {
 		@Override
-        public String toString() {
-            return "ind";
-        }
-		
+		public String toString() {
+			return "ind";
+		}
+
 	}
 };

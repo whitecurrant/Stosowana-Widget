@@ -40,5 +40,5 @@
         android:layout_marginTop="40dp"
         android:onClick="fetchOnClick"
         android:text="@string/dataFetchBtnTxt" />
-    
+
 </LinearLayout>

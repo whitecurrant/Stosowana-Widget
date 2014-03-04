@@ -6,11 +6,11 @@ import android.widget.RemoteViewsService;
 
 @TargetApi(11)
 public class WidgetService extends RemoteViewsService {
- 
+
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
-		
+
 		return new RemoteViewsProvider(this.getApplicationContext(), intent);
 	}
- 
+
 }

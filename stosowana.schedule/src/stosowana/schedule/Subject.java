@@ -2,28 +2,26 @@ package stosowana.schedule;
 
 import java.io.Serializable;
 
+public class Subject implements Comparable<Subject>, Serializable {
 
-public class Subject implements Comparable<Subject> , Serializable{
-
-
+	private static final long serialVersionUID = -3910579756321129484L;
 	private String name, teacher, classroom;
-	private Hour startTime,stopTime;
+	private Hour startTime, stopTime;
 	private Weekday day;
 	private Type type;
 	private Week week;
-	
-	public Subject(String name, String teacher,String classroom, String startTme, String stopTime, Type type){
-		
+
+	public Subject(String name, String teacher, String classroom, String startTme, String stopTime, Type type) {
+
 		this.name = name;
 		this.teacher = teacher;
 		this.classroom = classroom;
 		this.startTime = new Hour(startTme);
 		this.stopTime = new Hour(stopTime);
 		this.type = type;
-		
-		
+
 	}
-	
+
 	public Subject() {
 		// TODO Auto-generated constructor stub
 	}
@@ -47,17 +45,17 @@ public class Subject implements Comparable<Subject> , Serializable{
 	public Hour getStartTime() {
 		return startTime;
 	}
-	
+
 	public Hour getStopTime() {
 		return stopTime;
 	}
-	
+
 	public Type getType() {
 		return type;
 	}
 
 	public void setType(String str) {
-		switch(Integer.parseInt(str)){
+		switch (Integer.parseInt(str)) {
 		case 0:
 			this.type = Type.LAB;
 			break;
@@ -75,19 +73,19 @@ public class Subject implements Comparable<Subject> , Serializable{
 	}
 
 	public void setWeek(String str) {
-		switch(Integer.parseInt(str)){
-			case 0:
-				this.week = Week.AWEEK;
-				break;
-			case 1:
-				this.week = Week.BWEEK;
-				break;
-			case 2:
-				this.week = Week.EWEEK;
-				break;
+		switch (Integer.parseInt(str)) {
+		case 0:
+			this.week = Week.AWEEK;
+			break;
+		case 1:
+			this.week = Week.BWEEK;
+			break;
+		case 2:
+			this.week = Week.EWEEK;
+			break;
 		}
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -112,7 +110,7 @@ public class Subject implements Comparable<Subject> , Serializable{
 		this.day = day;
 	}
 
-	public String toString(){
+	public String toString() {
 		return name + " " + classroom;
 	}
 
@@ -121,5 +119,4 @@ public class Subject implements Comparable<Subject> , Serializable{
 		return startTime.compareTo(s2.getStartTime());
 	}
 
-		
 }
