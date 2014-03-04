@@ -131,6 +131,7 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f0a0001;
+        public static final int add=0x7f0a0014;
         public static final int addNewSubjectString=0x7f0a0012;
         public static final int app_name=0x7f0a0000;
         public static final int boxLabel=0x7f0a000e;

@@ -61,17 +61,17 @@
             android:id="@+id/checkBox2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/boxMargin"
+            android:layout_marginLeft="5dp"
             android:text="@string/check_box2" />
-
-    </LinearLayout>
 
         <CheckBox
             android:id="@+id/checkBox3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/boxMargin"
+            android:layout_marginLeft="5dp"
             android:text="@string/check_box3" />
+
+    </LinearLayout>
 
         <Button
             android:id="@+id/button1"

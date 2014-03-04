@@ -22,5 +22,6 @@
     <string name="test_type">wyk</string>
     <string name="addNewSubjectString">Dodaj nowy przedmiot</string>
     <string name="weekend">Luz, masz weekend</string>
+    <string name="add">Dodaj</string>
 
 </resources>

@@ -129,8 +129,6 @@ public class AddNewSubjectActivity extends FragmentActivity {
 
 		if(name.isEmpty())
 			Toast.makeText(context, "Proszę wpisać nazwę przedmiotu", Toast.LENGTH_SHORT).show();
-		else if(teacher.isEmpty())
-			Toast.makeText(context, "Proszę wpisać prowadzącego", Toast.LENGTH_SHORT).show();
 		else if(room.isEmpty())
 			Toast.makeText(context, "Proszę wpisać miejsce", Toast.LENGTH_SHORT).show();
 		else if(startT.equals("-:-"))

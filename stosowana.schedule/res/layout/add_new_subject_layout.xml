@@ -21,7 +21,8 @@
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/addNewSubjectString" />
+                android:text="@string/addNewSubjectString"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/addSubject_name"
@@ -135,7 +136,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:onClick="saveSubject"
-                android:text="@string/save" />
+                android:text="@string/add" />
         </LinearLayout>
 
     </ScrollView>

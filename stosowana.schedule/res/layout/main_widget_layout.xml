@@ -59,7 +59,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@+id/action_bar_textview"
                 android:contentDescription="@string/settings_bttn"
-                android:padding="1dp"
+                android:padding="0dp"
                 android:scaleType="centerInside"
                 android:src="@android:drawable/ic_menu_manage" />
 

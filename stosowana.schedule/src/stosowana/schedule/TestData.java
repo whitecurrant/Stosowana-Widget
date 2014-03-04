@@ -23,7 +23,7 @@ public class TestData {
 		for(int i =0;i<5;i++){
 			ArrayList<Subject> testList = new ArrayList<Subject>();
 			
-			for(int j = 0;j<2;j++){
+			for(int j = 0;j<3;j++){
 				
 				Log.d("widget", "j = " + j);
 				int h = rand.nextInt(testHours.length - 1);

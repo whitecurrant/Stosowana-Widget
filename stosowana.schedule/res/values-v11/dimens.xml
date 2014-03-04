@@ -6,8 +6,8 @@
 	<dimen name="widget_margin">0dp</dimen>
 	<!-- size = (70 x n) - 30 -->
 	<dimen name="minResizeWidth">250dp</dimen>
-	<dimen name="minResizeHeight">250dp</dimen>
+	<dimen name="minResizeHeight">180dp</dimen>
 	<dimen name="appwidget_min_width">250dp</dimen>
-    <dimen name="appwidget_min_height">320dp</dimen>
+    <dimen name="appwidget_min_height">180dp</dimen>
 
 </resources>
