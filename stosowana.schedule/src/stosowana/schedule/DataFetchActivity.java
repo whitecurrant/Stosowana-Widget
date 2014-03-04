@@ -72,6 +72,7 @@ public class DataFetchActivity extends Activity {
 	private HttpPost post;
 	private BufferedReader in = null;
 	private String token = null;
+	@SuppressWarnings("unused")
 	private String expires = null;
 	private Long uuid;
 	private String sid;
@@ -82,8 +83,21 @@ public class DataFetchActivity extends Activity {
 	private JsonParserFactory factory;
 	private JSONParser parser;
 	private Map<Integer, ArrayList<Subject>> tempMap;
-	static public boolean flag = false;
-
+	static public boolean flag = true;
+	
+	private String [] easterEggMessage = {"Witaj panie Płachno!",
+			"po pierwsze dziękujemy za wybranie naszych skromnych usług",
+			"życzymi miłego  i stabilnego korzystania z naszego widgetu!",
+			"paanie..chyba pan nie myslałeś, że to już koniec?",
+			"dobra, pozwolimy Ci użyć naszej aplikacji pod jednym warunkiem:",
+			"nie nie chodzi o spanie na wykładach.. ta sprawa jest już przegrana",
+			"a tak w ogóle.. to dlaczego nie można spać na wykładach?",
+			"przecież to jest jakiś skandal! a medja milczo!",
+			"dobra.. to już jest ostatnia wiadomość..",
+			"ha!",
+			"Nie zapomnij o spełnieniu zasad licencji :P",
+			"Trzym się! ;)"};
+	
 	private void connectToFalseData() {
 
 		Log.d(TAG, "connecting to false data");
@@ -297,6 +311,9 @@ public class DataFetchActivity extends Activity {
 			saveData(new File(this.getFilesDir().getAbsolutePath() + "/schedule"));
 			showWidget();
 
+		} catch (PlachnoException e) {	
+			e.printStackTrace();
+			displayEasterEgg(0);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 			displayFailureInfo();
@@ -306,7 +323,7 @@ public class DataFetchActivity extends Activity {
 			displayFailureInfo();
 		} catch (JSONException e) {
 			e.printStackTrace();
-			ALERT_MESSAGE = "Wystąpił błąd przy parsowaniu danych";
+			ALERT_MESSAGE = "Brak danych na serwerze";
 			displayFailureInfo();
 		} catch (AndroidRuntimeException e) {
 			e.printStackTrace();
@@ -316,7 +333,51 @@ public class DataFetchActivity extends Activity {
 			e.printStackTrace();
 			ALERT_MESSAGE = "Wystąpił błąd w komunikacji z serwerem";
 			displayFailureInfo();
-		}
+		} 
+	}
+
+	private void displayEasterEgg(final int messageCounter) {
+		//schowanie klawiatury
+		InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+		imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("if(surname).equals(\"Płachno\")");
+		builder.setMessage(easterEggMessage[messageCounter]);
+		builder.setIcon(R.drawable.horzyk);
+		builder.setCancelable(false);
+		builder.setPositiveButton("Ponów", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+
+				if(messageCounter < easterEggMessage.length-1)
+					displayEasterEgg(messageCounter + 1);
+				else{
+					Intent i = getIntent();
+					startActivity(i);
+					finish();
+				}
+				flag = false;
+
+			}
+		});
+		builder.setNegativeButton("Wyjdź", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(messageCounter < easterEggMessage.length-1)
+					displayEasterEgg(messageCounter + 1);
+				else{
+					Intent i = getIntent();
+					startActivity(i);
+					finish();
+				}
+				flag = false;
+			}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
+		
 	}
 
 	private void displayFailureInfo() {
@@ -340,7 +401,7 @@ public class DataFetchActivity extends Activity {
 		});
 		builder.setNegativeButton("Wyjdź", new DialogInterface.OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onClick(DialogInterface dialog, int which) {				
 				
 				// deleteScheduleDir(new
 				// File(context.getFilesDir().getPath()));
@@ -358,9 +419,9 @@ public class DataFetchActivity extends Activity {
 		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void getToken() throws ClientProtocolException, IOException {
 
-		// ALERT_MESSAGE = "hohoorzyk";
 		String line = null;
 		// if (line == null)
 		// throw new ClientProtocolException();
@@ -381,7 +442,7 @@ public class DataFetchActivity extends Activity {
 		}
 	}
 
-	private void login() throws ClientProtocolException, IOException, JSONException {
+	private void login() throws ClientProtocolException, IOException, JSONException, PlachnoException {
 
 		String line = null;
 		post.setEntity(new UrlEncodedFormEntity(makeLogin()));
@@ -393,8 +454,11 @@ public class DataFetchActivity extends Activity {
 		switch (Integer.parseInt(jsonObj.getString("code"))) {
 		case 200:
 			sid = jsonObj.getString("session");
-			name = jsonObj.getString("name");
-			surname = jsonObj.getString("surname");
+			name = jsonObj.getJSONObject("student").getString("name");
+			surname = jsonObj.getJSONObject("student").getString("surname");
+			Log.d(TAG, name + " " + surname);
+			if ( (surname.equals("Plachno") || surname.equals("Płachno")) && flag)
+				throw new PlachnoException();
 			// Log.d(TAG, sid);
 			break;
 		case 400:
@@ -416,8 +480,6 @@ public class DataFetchActivity extends Activity {
 		JSONObject jsonObj = new JSONObject(line);
 		switch (Integer.parseInt(jsonObj.getString("code"))) {
 		case 200:
-			// do dokonczenia, teraz biore to co jest mi potrzebne do
-			// komunikacji
 			scheduleID = jsonObj.getJSONArray("scheduleList").getJSONObject(0).getString("scheduleID");
 			// Log.d(TAG, scheduleID);
 			break;
@@ -438,8 +500,6 @@ public class DataFetchActivity extends Activity {
 		JSONObject jsonObj = new JSONObject(line);
 		switch (Integer.parseInt(jsonObj.getString("code"))) {
 		case 200:
-			// Log.d(TAG, "cous");
-			// Log.d(TAG,jsonObj.getJSONObject("schedule").getJSONArray("0").getJSONObject(0).getString("subjectName"));
 			for (int i = 0; i < jsonObj.getJSONObject("schedule").length(); i++) {
 				ArrayList<Subject> list = new ArrayList<Subject>();
 				for (int j = 0; j < jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).length(); j++) {
@@ -471,6 +531,7 @@ public class DataFetchActivity extends Activity {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void logout() throws ClientProtocolException, IOException {
 
 		String line = null;
