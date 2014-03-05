@@ -24,11 +24,10 @@ public class MenuActivity extends Activity {
 
 	@Override
 	protected void onResume() {
+		
 		Log.d(TAG, "onResume");
 		super.onResume();
-		cb1 = (CheckBox) findViewById(R.id.checkBox1);
-		cb2 = (CheckBox) findViewById(R.id.checkBox2);
-		cb3 = (CheckBox) findViewById(R.id.checkBox3);
+		
 		DataFetchActivity.loadData(new File(getApplicationContext().getFilesDir().getPath() + "/schedule"));
 		if (!(new File(getApplicationContext().getFilesDir().getPath() + "/checkbox/checkbox1").exists()))
 			cb1.setChecked(true);
@@ -50,23 +49,10 @@ public class MenuActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu_layout);
 		// Log.d(TAG, Boolean.toString(Widget.box1));
-		boolean box1 = Widget.isLectures();
-		boolean box2 = Widget.isLaboratories();
-		boolean box3 = Widget.isCustom();
+
 		cb1 = (CheckBox) findViewById(R.id.checkBox1);
 		cb2 = (CheckBox) findViewById(R.id.checkBox2);
 		cb3 = (CheckBox) findViewById(R.id.checkBox3);
-
-		if (box1) {
-			cb1.setChecked(true);
-		}
-		if (box2) {
-			cb2.setChecked(true);
-		}
-		if (box3) {
-			cb3.setChecked(true);
-		}
-
 	}
 
 	public void fetchData(View view) {

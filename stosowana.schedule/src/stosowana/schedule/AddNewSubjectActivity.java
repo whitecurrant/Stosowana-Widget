@@ -143,7 +143,7 @@ public class AddNewSubjectActivity extends FragmentActivity {
 			subject.setStartTime(startTime);
 			subject.setStopTime(stopTime);
 			subject.setType("2");
-			Widget.add(selectedDay, subject);
+			Widget.add(selectedDay, subject, context);
 			finish();
 		}
 	}

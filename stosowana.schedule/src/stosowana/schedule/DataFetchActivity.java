@@ -196,7 +196,7 @@ public class DataFetchActivity extends Activity {
 			}
 		}
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public static void loadData(File file) {
 
