@@ -344,7 +344,7 @@ public class DataFetchActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle("if(surname).equals(\"Płachno\")");
 		builder.setMessage(easterEggMessage[messageCounter]);
-		builder.setIcon(R.drawable.horzyk);
+		builder.setIcon(R.drawable.plachno);
 		builder.setCancelable(false);
 		builder.setPositiveButton("Ponów", new DialogInterface.OnClickListener() {
 			@Override
@@ -457,7 +457,7 @@ public class DataFetchActivity extends Activity {
 			name = jsonObj.getJSONObject("student").getString("name");
 			surname = jsonObj.getJSONObject("student").getString("surname");
 			Log.d(TAG, name + " " + surname);
-			if ( (surname.equals("Plachno") || surname.equals("Płachno")) && flag)
+			if ( (surname.equals("Konsek") || surname.equals("Płachno")) && flag)
 				throw new PlachnoException();
 			// Log.d(TAG, sid);
 			break;
