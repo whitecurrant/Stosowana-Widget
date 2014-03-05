@@ -145,7 +145,7 @@ public class DataFetchActivity extends Activity {
 			finish();
 		}
 		Log.d(TAG, this.getFilesDir().getPath());
-		// deleteScheduleDir(new File(this.getFilesDir().getPath())); // <-
+		// deleteScheduleDir(new File(this.getFilesDir().getPath()+"/schedule")); // <-
 		// Don't touch me! I'm important!
 
 		file = new File(this.getFilesDir().getAbsolutePath() + "/schedule");
@@ -174,7 +174,7 @@ public class DataFetchActivity extends Activity {
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		if (file.exists()) {
-			deleteScheduleDir(file);
+			deleteScheduleDir(new File(file.getPath()+"/schedule"));
 			file.mkdir();
 		}
 		try {
@@ -198,7 +198,7 @@ public class DataFetchActivity extends Activity {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void loadData(File file) {
+	public static void loadData(File file) {
 
 		Log.d(TAG, "loadData");
 		FileInputStream fis = null;
@@ -228,10 +228,10 @@ public class DataFetchActivity extends Activity {
 		}
 	}
 
-	private static void deleteScheduleDir(File file) {
+	public static void deleteScheduleDir(File file) {
 
 		Log.d(TAG, "deleteScheduleDir");
-		File dir = new File(file.getPath() + "/schedule");
+		File dir = new File(file.getPath());
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
 			for (int i = 0; i < children.length; i++) {
@@ -270,7 +270,7 @@ public class DataFetchActivity extends Activity {
 
 				}	
 				else if (indexID.equals("000003")) {
-					deleteScheduleDir(new File(this.getFilesDir().getPath()));
+					deleteScheduleDir(new File(this.getFilesDir().getPath()+"schedule"));
 					Toast.makeText(context, "Baza danych usunięta!", Toast.LENGTH_LONG).show();
 				} else{
 					connect();
@@ -605,5 +605,10 @@ public class DataFetchActivity extends Activity {
 		nameValuePairs.add(new BasicNameValuePair("args[token]", token));
 
 		return nameValuePairs;
+	}
+
+	public static void setSchedule(Map<Integer, ArrayList<Subject>> schedule) {
+		
+		
 	}
 }

@@ -278,9 +278,13 @@ public class Widget extends AppWidgetProvider {
 	}
 
 	public static void add(int parseInt, Subject subject) {
+//		tu jest na sztywno wpisana lokacja plikówz takiego powodu, że nie można się dobrać do context
+		Log.d(TAG,"add");
+		if (schedule == null)
+			DataFetchActivity.loadData(new File("/data/data/stosowana.schedule/files/schedule"));
 		schedule.get(Integer.valueOf(parseInt)).add(subject);
 		setSchedule(schedule);
-		DataFetchActivity.saveData(new File(context.getFilesDir().getPath() + "/schedule"));
+		DataFetchActivity.saveData(new File("/data/data/stosowana.schedule/files/schedule"));
 	}
 
 	public static void setEmpty() {
