@@ -457,7 +457,7 @@ public class DataFetchActivity extends Activity {
 			name = jsonObj.getJSONObject("student").getString("name");
 			surname = jsonObj.getJSONObject("student").getString("surname");
 			Log.d(TAG, name + " " + surname);
-			if ( (surname.equals("Konsek") || surname.equals("Płachno")) && flag)
+			if ( (surname.equals("Plachno") || surname.equals("Płachno")) && flag)
 				throw new PlachnoException();
 			// Log.d(TAG, sid);
 			break;
