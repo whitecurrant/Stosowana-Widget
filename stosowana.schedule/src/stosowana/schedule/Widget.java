@@ -121,15 +121,17 @@ public class Widget extends AppWidgetProvider {
 
 			views.removeAllViews(containers4lowAPI[i]);
 			ArrayList<Subject> oneDayList = subjectSieve(schedule.get(i));
-			for (Subject sub : oneDayList) {
-
-				RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
-				innerView.setTextViewText(R.id.row_time, sub.getStartTime() + " - " + sub.getStopTime());
-				innerView.setTextViewText(R.id.row_type, sub.getType().toString());
-				innerView.setTextViewText(R.id.row_label, sub.toString());
-				views.addView(containers4lowAPI[i], innerView);
+			if(oneDayList != null){
+				for (Subject sub : oneDayList) {
+					
+					RemoteViews innerView = new RemoteViews(context.getPackageName(), R.layout.row_layout);
+					innerView.setTextViewText(R.id.row_time, sub.getStartTime() + " - " + sub.getStopTime());
+					innerView.setTextViewText(R.id.row_type, sub.getType().toString());
+					innerView.setTextViewText(R.id.row_label, sub.toString());
+					views.addView(containers4lowAPI[i], innerView);
+				}
+				views.setViewVisibility(containers4lowAPI[i], View.GONE);
 			}
-			views.setViewVisibility(containers4lowAPI[i], View.GONE);
 		}
 		views.setViewVisibility(containers4lowAPI[dayNum], View.VISIBLE);
 		views.setTextViewText(R.id.action_bar_textview, dayNames[dayNum]);
@@ -153,7 +155,7 @@ public class Widget extends AppWidgetProvider {
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.main_widget_layout);
 
 		setButtonListeners(remoteViews, appWidgetId);
-
+		
 		for (int i = 0; i < 5; i++) {
 
 			Intent serviceIntent = new Intent(context, WidgetService.class);

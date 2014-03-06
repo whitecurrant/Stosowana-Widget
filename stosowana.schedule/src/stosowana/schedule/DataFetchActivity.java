@@ -500,27 +500,31 @@ public class DataFetchActivity extends Activity {
 		JSONObject jsonObj = new JSONObject(line);
 		switch (Integer.parseInt(jsonObj.getString("code"))) {
 		case 200:
-			for (int i = 0; i < jsonObj.getJSONObject("schedule").length(); i++) {
+//			for (int i = 0; i < jsonObj.getJSONObject("schedule").length(); i++) {
+//			hardcoded 5 but working
+			for (int i = 0; i < 5; i++) {
 				ArrayList<Subject> list = new ArrayList<Subject>();
-				for (int j = 0; j < jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).length(); j++) {
-					Subject subject = new Subject();
-					subject.setStartTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
-							.getString("start"));
-					subject.setStopTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
-							.getString("end"));
-					subject.setWeek(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
-							.getString("week"));
-					subject.setClassroom(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
-							.getString("room"));
-					subject.setTeacher(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
-							.getString("teacher"));
-					subject.setName(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
-							.getString("subjectName"));
-					subject.setType(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
-							.getString("type"));
-					list.add(subject);
+				
+				if(jsonObj.getJSONObject("schedule").has(Integer.toString(i))){
+					for (int j = 0; j < jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).length(); j++) {
+						Subject subject = new Subject();
+						subject.setStartTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
+								.getString("start"));
+						subject.setStopTime(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
+								.getString("end"));
+						subject.setWeek(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
+								.getString("week"));
+						subject.setClassroom(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
+								.getString("room"));
+						subject.setTeacher(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
+								.getString("teacher"));
+						subject.setName(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
+								.getString("subjectName"));
+						subject.setType(jsonObj.getJSONObject("schedule").getJSONArray(Integer.toString(i)).getJSONObject(j)
+								.getString("type"));
+						list.add(subject);
+					}
 				}
-
 				tempMap.put(Integer.valueOf(i), list);
 			}
 			break;
