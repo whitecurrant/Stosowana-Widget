@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class DataFetchActivity extends Activity {
 														// serialized data
 
 	// Zmienne odpowiedzialne za pobranie danych z REQUEST
-	private final static String REQUEST = "http://arbus.home.pl/zapisy2013/api/index.php";
+	private final static String REQUEST = "http://arbus.home.pl/zapisy" + Calendar.getInstance().get(Calendar.YEAR) + "/api/index.php";
 	private static String indexID;
 	private static String passwd;
 	private HttpClient client;
