@@ -66,7 +66,7 @@ public class DataFetchActivity extends Activity {
 														// serialized data
 
 	// Zmienne odpowiedzialne za pobranie danych z REQUEST
-	private final static String REQUEST = "http://arbus.home.pl/zapisy" + Calendar.getInstance().get(Calendar.YEAR) + "/api/index.php";
+	private final static String REQUEST = "http://arbus.home.pl/zapisy/lato" + Calendar.getInstance().get(Calendar.YEAR) + "/api/index.php";
 	private static String indexID;
 	private static String passwd;
 	private HttpClient client;
